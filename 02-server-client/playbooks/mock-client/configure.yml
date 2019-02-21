@@ -1,0 +1,10 @@
+---
+- hosts: all
+  become: no
+  gather_facts: no
+  tasks:
+    - name: Mock configuration set
+      lineinfile:
+        path: "{{ path }}/client.conf"
+        regexp: "^SERVER_ID="
+        line: "SERVER_ID={{ server_id }}"

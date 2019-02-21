@@ -1,0 +1,29 @@
+---
+- hosts: all
+  become: no
+  gather_facts: no
+  tasks:
+    - name: Build the location
+      file:
+        path: "{{ path }}"
+        state: directory
+
+    - name: Mint a client ID
+      set_fact:
+        client_id: "{{ 1000000 | random }}"
+
+    - name: Mock configuration initiated
+      file:
+        path: "{{ path }}/client.conf"
+        state: touch
+
+    - name: Mock configuration set
+      lineinfile:
+        path: "{{ path }}/client.conf"
+        regexp: "^CLIENT_ID="
+        line: "CLIENT_ID={{ client_id }}"
+
+    - name: Set attributes
+      set_stats:
+        data:
+          id: "{{ client_id }}"
