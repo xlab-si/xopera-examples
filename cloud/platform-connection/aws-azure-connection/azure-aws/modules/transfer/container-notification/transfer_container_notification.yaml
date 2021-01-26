@@ -1,0 +1,65 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+  radon.nodes.transfer_container_notification:
+    derived_from: tosca.nodes.SoftwareComponent
+    properties:
+      resource_group_name:
+        type: string
+        description: Name of the Azure resource group to use.
+      storage_account_name:
+        type: string
+        description: Name of the Azure storage account to use.
+      function_app_name:
+        type: string
+        description: Name of the the new transfer function application.
+      function_name:
+        type: string
+        description: Name of the transfer Azure function
+      event_subscription_name:
+        type: string
+        description: Name of event subscription trigger that will be created
+      aws_credentials:
+        type: string
+        description: AWS credentials lookup to json file with access_key_id and secret_access_key
+      azure_container_name:
+        type: string
+        description: The name of the Azure container - transfer source
+      aws_bucket_name:
+        type: string
+        description: The name of the AWS bucket - transfer destination
+    attributes:
+      resource_group_name:
+        type: string
+      storage_account_name:
+        type: string
+      function_app_name:
+        type: string
+      function_name:
+        type: string
+      event_subscription_name:
+        type: string
+      aws_credentials:
+        type: string
+      azure_container_name:
+        type: string
+      aws_bucket_name:
+        type: string
+    interfaces:
+      Standard:
+        type: tosca.interfaces.node.lifecycle.Standard
+        inputs:
+          resource_group_name: {default: { get_property: [SELF, resource_group_name] }, type: string }
+          storage_account_name: {default: { get_property: [SELF, storage_account_name] }, type: string }
+          function_app_name: {default: { get_property: [SELF, function_app_name] }, type: string }
+          function_name: {default: { get_property: [SELF, function_name] }, type: string }
+          event_subscription_name: {default: { get_property: [SELF, event_subscription_name] }, type: string }
+          aws_credentials: {default: { get_property: [SELF, aws_credentials] }, type: string }
+          azure_container_name: {default: { get_property: [SELF, azure_container_name] }, type: string }
+          aws_bucket_name: {default: { get_property: [SELF, aws_bucket_name] }, type: string }
+        operations:
+          create:
+            implementation:
+              primary: playbooks/create.yaml
+...

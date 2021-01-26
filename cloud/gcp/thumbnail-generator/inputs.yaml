@@ -1,0 +1,30 @@
+---
+host_ip: <host_ip>
+project_id: <project_id>
+service_account_file: <service_account_file>
+bucket_location: <bucket_location>
+bucket_in_name: <bucket_in_name>
+bucket_out_name: <bucket_out_name>
+bucket_function_name: <bucket_function_name>
+function_name: <function_name>
+function_location: <function_location>
+function_runtime: <function_runtime>
+function_entry_point: <function_entry_point>
+function_timeout: <function_timeout>
+function_memory: <function_memory>
+
+### Example:
+# host_ip: localhost
+# project_id: project-123456
+# service_account_file: /tmp/service_account.json
+# bucket_location: EU
+# bucket_in_name: original
+# bucket_out_name: resized
+# bucket_function_name: function
+# function_name: image-resize
+# function_location: europe-west1
+# function_runtime: python37
+# function_entry_point: entry_point
+# function_timeout: 60s
+# function_memory: 256
+...

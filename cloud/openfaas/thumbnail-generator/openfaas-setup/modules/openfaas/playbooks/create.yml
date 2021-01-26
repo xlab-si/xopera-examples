@@ -1,0 +1,31 @@
+---
+- hosts: all
+  tasks:
+  - name: Install prerequisite packages
+    package:
+      name:  curl
+      state: present
+
+  - name: Install openfaas-cli
+    shell: curl -sL https://cli.openfaas.com | sudo sh
+    args:
+      warn: no
+
+  - name: Find out whether this node is a swarm manager already
+    shell: "docker node ls"
+    ignore_errors: true
+    changed_when: false
+    register: swarm_manager_check
+
+  - name: Initialize Docker Swarm mode
+    raw: docker swarm init
+    when: swarm_manager_check.rc != 0
+
+  - name: Remove openfaas directory if exists
+    file:
+      path: faas
+      state: absent
+
+  - name: Deploy the stack for OpenFaaS
+    shell: git clone https://github.com/openfaas/faas && cd faas && ./deploy_stack.sh --no-auth
+...

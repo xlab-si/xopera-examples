@@ -1,0 +1,68 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+  - modules/bucket-create/bucket.yml
+  - modules/function-load/function-load.yml
+  - modules/function-deploy/function-deploy.yml
+  - modules/bucket-notification/bucket-notification.yml
+
+topology_template:
+  inputs:
+    host_ip:
+      type: string
+    credentials:
+      type: string
+    bucket_in_name:
+      type: string
+    bucket_out_name:
+      type: string
+    resize_image_name:
+      type: string
+    resize_function_name:
+      type: string
+
+  node_templates:
+    my-workstation:
+      type: tosca.nodes.Compute
+      attributes:
+        private_address: { get_input: host_ip }
+        public_address: { get_input: host_ip }
+
+    bucket_create:
+      type: radon.nodes.bucket_create
+      properties:
+        bucket_in_name: { get_input: bucket_in_name }
+        bucket_out_name: { get_input: bucket_out_name }
+        minio_ip: { get_input: host_ip }
+        credentials: { get_input: credentials }
+      requirements:
+        - host: my-workstation
+
+    function_load:
+      type: radon.nodes.function_load
+      properties:
+        resize_image_name: { get_input: resize_image_name }
+        node_ip: { get_input: host_ip }
+      requirements:
+        - host: my-workstation
+
+    function_deploy:
+      type: radon.nodes.function_deploy
+      properties:
+        resize_image_name: { get_input: resize_image_name }
+        resize_function_name: { get_input: resize_function_name }
+        node_ip: { get_input: host_ip }
+      requirements:
+        - host: my-workstation
+
+    bucket_notification:
+      type: radon.nodes.bucket_notification
+      properties:
+        node_ip: { get_input: host_ip }
+        credentials: { get_input: credentials }
+        function_name: { get_input: resize_function_name }
+        bucket_in_name: { get_input: bucket_in_name }
+      requirements:
+        - host: my-workstation
+...

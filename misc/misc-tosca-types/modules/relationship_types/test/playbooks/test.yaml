@@ -1,0 +1,18 @@
+---
+- hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: Say test
+      debug:
+        msg: "test"
+
+    - name: Print whatever lies in relationship_property
+      debug:
+        msg: "{{ relationship_property }}"
+
+    - name: Set relationship attribute
+      set_stats:
+        data:
+          relationship_attribute: "This is a relationship attribute."
+...

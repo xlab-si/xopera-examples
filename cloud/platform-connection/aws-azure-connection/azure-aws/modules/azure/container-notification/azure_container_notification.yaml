@@ -1,0 +1,51 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+  radon.nodes.container_notification:
+    derived_from: tosca.nodes.SoftwareComponent
+    properties:
+      container_in_name:
+        type: string
+        description: The name container with incoming blobs
+      storage_account_name:
+        type: string
+        description: Name of the storage account
+      resource_group_name:
+        type: string
+        description: Name of the resource group
+      function_app_name:
+        type: string
+        description: Name of the existing function app
+      event_subscription_name:
+        type: string
+        description: Name of event subscription trigger that will be created
+      function_name:
+        type: string
+        description: Name of the brand new Azure function
+    attributes:
+      container_in_name:
+        type: string
+      storage_account_name:
+        type: string
+      resource_group_name:
+        type: string
+      function_app_name:
+        type: string
+      event_subscription_name:
+        type: string
+      function_name:
+        type: string
+    interfaces:
+      Standard:
+        type: tosca.interfaces.node.lifecycle.Standard
+        inputs:
+          container_in_name: {default: { get_property: [SELF, container_in_name] }, type: string }
+          storage_account_name: {default: { get_property: [SELF, storage_account_name] }, type: string }
+          resource_group_name: {default: { get_property: [SELF, resource_group_name] }, type: string }
+          function_app_name: {default: { get_property: [SELF, function_app_name] }, type: string }
+          event_subscription_name: {default: { get_property: [SELF, event_subscription_name] }, type: string }
+          function_name: {default: { get_property: [SELF, function_name] }, type: string }
+        operations:
+          create: playbooks/create.yaml
+...

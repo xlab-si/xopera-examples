@@ -1,0 +1,21 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Remove a Google Cloud function
+      gcp_cloudfunctions_cloud_function:
+        state: absent
+        name: "{{ function_name }}"
+        location: "{{ function_location }}"
+        project: "{{ project_id }}"
+        auth_kind: serviceaccount
+        service_account_file: "{{ service_account_file }}"
+
+    - name: Unistall prerequsiste packages
+      pip:
+        name:
+          - requests>=2.18.4
+          - google-auth>=1.3.0
+          - google-cloud==0.34.0
+        state: absent
+...

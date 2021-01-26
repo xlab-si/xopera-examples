@@ -1,0 +1,42 @@
+---
+- hosts: localhost
+  tasks:
+  - name: Include yaml variables
+    include_vars: ../inputs.yml
+
+  - name: Install with pip
+    pip:
+      name:
+        - requests
+        - docker
+
+  - name: Configure function handler
+    template:
+      src: "python-function-template/handler.py"
+      dest: "image-resize-template/function/handler.py"
+    ignore_errors: true
+
+  - name: Add MinIO helper
+    template:
+      src: "python-function-template/minio_helper.py"
+      dest: "image-resize-template/function/minio_helper.py"
+    ignore_errors: yes
+
+  - name: Remove built function image
+    docker_image:
+      name: "python-docker-function"
+      build:
+        path: "image-resize-template"
+      archive_path: "image-resize-template.tar"
+      source: build
+      state: absent
+
+  - name: Build function image from Dockerfile
+    docker_image:
+      name: "python-docker-function"
+      build:
+        path: "image-resize-template"
+      nocache: true
+      archive_path: "python-docker-function.tar"
+      state: present
+...

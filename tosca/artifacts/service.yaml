@@ -1,0 +1,55 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+  opera.nodes.file:
+    derived_from: tosca.nodes.SoftwareComponent
+    attributes:
+      my_text_file_attribute:
+        description: Text file contents
+        type: string
+      my_json_file_attribute:
+        description: JSON file contents
+        type: string
+    properties:
+      json_file:
+        description: JSON file path
+        type: string
+    interfaces:
+      Standard:
+        operations:
+          create:
+            implementation: playbooks/create.yaml
+            inputs:
+              text_file_artifact:
+                description: Text file artifact input
+                type: string
+                default: { get_artifact: [ SELF, text_file ] }
+              json_file_artifact:
+                description: JSON file artifact input
+                type: string
+                default: { get_property: [ SELF, json_file ] }
+    artifacts:
+        text_file:
+          type: tosca.artifacts.File
+          file: files/file.txt
+
+topology_template:
+  node_templates:
+    artifacts_file:
+      type: opera.nodes.file
+      properties:
+        json_file: { get_artifact: [ SELF, json_file ] }
+      artifacts:
+          json_file:
+            type: tosca.artifacts.File
+            file: files/file.json
+
+  outputs:
+    output_attribute_text_file:
+      description: Example of attribute output
+      value: { get_attribute: [ artifacts_file, my_text_file_attribute ] }
+    output_attribute_json_file:
+      description: Example of attribute output
+      value: { get_attribute: [ artifacts_file, my_json_file_attribute ] }
+...

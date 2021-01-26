@@ -1,0 +1,22 @@
+---
+host_ip: <your_host_ip>
+location: <resources-location>
+resource_group_name: <resource-gropu-name>
+storage_account_name: <storage-account-name>
+container_in_name: <incoming-container-name>
+container_out_name: <result-container-name>
+function_app_name: <funtion-app-name>
+function_name: <function-name>
+event_subscription_name: <event-trigger-name>
+
+### Example:
+# host_ip: localhost
+# location: westeurope
+# resource_group_name: RADON-FaaS
+# storage_account_name: watermarkstorageaccount
+# container_in_name: original
+# container_out_name: watermarked
+# function_app_name: image-watermark-function-app
+# function_name: image-watermark-function
+# event_subscription_name: watermark-function-trigger
+...

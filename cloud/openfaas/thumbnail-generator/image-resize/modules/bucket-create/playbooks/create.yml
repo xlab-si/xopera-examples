@@ -1,0 +1,27 @@
+---
+- hosts: all
+  tasks:
+  - name: Install prerequsiste python3 packages
+    pip:
+      name:
+        - botocore==1.12.236
+        - boto==2.49.0
+        - boto3==1.9.236
+      state: latest
+
+  - name: Create MinIO "{{ bucket_in_name }}" bucket
+    aws_s3:
+      bucket: "{{ bucket_in_name }}"
+      mode: create
+      aws_access_key: "{{ credentials.minio_access_key }}"
+      aws_secret_key: "{{ credentials.minio_secret_key }}"
+      s3_url: "http://{{ minio_ip }}:9000"
+
+  - name: Create MinIO "{{ bucket_out_name }}" bucket
+    aws_s3:
+      bucket: "{{ bucket_out_name }}"
+      mode: create
+      aws_access_key: "{{ credentials.minio_access_key }}"
+      aws_secret_key: "{{ credentials.minio_secret_key }}"
+      s3_url: "http://{{ minio_ip }}:9000"
+...

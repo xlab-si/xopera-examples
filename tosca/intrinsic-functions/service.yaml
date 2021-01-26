@@ -1,0 +1,121 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+  hello_type_1:
+    derived_from: tosca.nodes.SoftwareComponent
+    attributes:
+      attribute1:
+        type: string
+    properties:
+      property1:
+        type: string
+
+  hello_type_2:
+    derived_from: tosca.nodes.SoftwareComponent
+    attributes:
+      attribute2:
+        type: string
+    properties:
+      property2:
+        type: string
+
+  hello_type_3:
+    derived_from: tosca.nodes.SoftwareComponent
+    attributes:
+      attribute3_1:
+        type: string
+      attribute3_2:
+        type: string
+        default: { join: [ [ "a", "t", "t", "r", "i", "b", "u", "t", "e" ] ] }
+    properties:
+      property3_1:
+        type: string
+      property3_2:
+        type: string
+        default: { concat: [ 'Property: ', get_attribute: [ SELF, attribute3_2 ] ] }
+      property3_3:
+        type: string
+        required: false
+
+topology_template:
+  inputs:
+    input:
+      type: string
+      default: input
+
+  node_templates:
+    my-workstation:
+      type: tosca.nodes.Compute
+      attributes:
+        private_address: localhost
+        public_address: localhost
+
+    hello1:
+      type: hello_type_1
+      attributes:
+        attribute1: "attribute1"
+      properties:
+        property1: "property1"
+      requirements:
+        - host: my-workstation
+
+    hello2:
+      type: hello_type_2
+      attributes:
+        attribute2: "attribute2"
+      properties:
+        property2: "property2"
+      requirements:
+        - host: my-workstation
+
+    hello3:
+      type: hello_type_3
+      attributes:
+        attribute3_1: { concat: [ 'Attribute: ', get_property: [ SELF, property3_1 ] ] }
+      properties:
+        property3_1: { token: [ "my_property", "_", 1 ] }
+
+  outputs:
+    concat_output:
+      # Result: http://attribute1:property1
+      description: Concatenate string values
+      value: { concat: [ 'http://',
+                       get_attribute: [ hello1, attribute1 ],
+                       ':',
+                       get_property: [ hello1, property1 ] ] }
+    join1_output:
+       # Result: tosca
+      description: Join string values without a delimiter (concat)
+      value: { join: [ [ "t", "o", "s", "c", "a" ] ] }
+    join2_output:
+       # Result: t_o_s_c_a
+      description: Join string values with delimiter
+      value: { join: [ [ "t", "o", "s", "c", "a" ], "_" ] }
+    join3_output:
+       # Result: input, attribute2, property2
+      description: Join string values with delimiter
+      value: { join: [ [ { get_input: input },
+                         { get_attribute: [ hello2, attribute2 ] },
+                         { get_property: [ hello2, property2 ] } ], ", " ] }
+    token1_output:
+       # Result: 111
+      description: Tokenize the string and get the zeroth substring
+      value: { token: [ "111 222 333 444", " ", 0 ] }
+    token2_output:
+       # Result: s
+      description: Tokenize the string and get the second substring
+      value: { token: [ "t-*-o-*-s-*-c-*-a", "-*-", 2 ] }
+    attribute:
+      # Result: Attribute: property
+      description: Attribute value
+      value: { get_attribute: [ hello3, attribute3_1 ] }
+    property:
+      # Result: Property: attribute
+      description: Property value
+      value: { get_property: [ hello3, property3_2 ] }
+    properties:
+      # Result: Properties: property1 property2 property
+      description: Joined properties
+      value: { join: [[ 'Properties:', { get_property: [ hello1, property1 ] },
+                                        { get_property: [ hello2, property2 ] },
+                                        { get_property: [ hello3, property3_1 ] } ], " " ] }

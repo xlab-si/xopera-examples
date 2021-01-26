@@ -1,0 +1,11 @@
+---
+- hosts: all
+  tasks:
+  - name: DELETE {{ resize_function_name }} function
+    uri:
+      url: "http://{{ node_ip }}:8080/system/functions"
+      method: DELETE
+      body: "{\"functionName\": \"{{ resize_function_name }}\"}"
+      body_format: json
+      status_code: 202, 404
+...

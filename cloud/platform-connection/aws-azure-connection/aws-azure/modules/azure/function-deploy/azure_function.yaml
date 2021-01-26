@@ -1,0 +1,61 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+  radon.nodes.function_deploy:
+    derived_from: tosca.nodes.SoftwareComponent
+    properties:
+      function_app_name:
+        type: string
+        description: Name of the existing function application.
+      node_ip:
+        type: string
+        description: IP of the target node
+      storage_account_name:
+        type: string
+        description: Name of the storage account.
+      resource_group_name:
+        type: string
+        description: Name of the resource group.
+      function_name:
+        type: string
+        description: Name of the brand new Azure function
+      container_out_name:
+        type: string
+        description: The name of the Azure container with results
+    attributes:
+      azure_connection_string:
+        type: string
+      function_app_name:
+        type: string
+      node_ip:
+        type: string
+      storage_account_name:
+        type: string
+      resource_group_name:
+        type: string
+      function_name:
+        type: string
+      container_out_name:
+        type: string
+    interfaces:
+      Standard:
+        type: tosca.interfaces.node.lifecycle.Standard
+        inputs:
+          function_app_name: {default: { get_property: [SELF, function_app_name] }, type: string }
+          node_ip: {default: { get_property: [SELF, node_ip] }, type: string }
+          storage_account_name: {default: { get_property: [SELF, storage_account_name] }, type: string }
+          resource_group_name: {default: { get_property: [SELF, resource_group_name] }, type: string }
+          function_name: {default: { get_property: [SELF, function_name] }, type: string }
+          container_out_name: {default: { get_property: [SELF, container_out_name] }, type: string }
+        operations:
+          create:
+            implementation:
+              primary: playbooks/create.yaml
+              dependencies:
+                - playbooks/functions
+    capabilities:
+      connection_str:
+        type: tosca.capabilities.Compute
+        valid_source_types: [radon.nodes.aws_lambda_transfer]
+...

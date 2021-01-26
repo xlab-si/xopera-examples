@@ -1,0 +1,36 @@
+---
+- hosts: all
+  tasks:
+    - name: Install prerequsiste packages
+      pip:
+        name:
+          - ansible[azure]
+        state: latest
+
+    - name: Create a new Storage Account on Azure portal
+      shell: "az storage account create
+              --name {{ storage_account_name }}
+              --resource-group {{ resource_group_name }}
+              --access-tier Hot
+              --kind StorageV2
+              --location {{ location }}
+              --sku Standard_RAGRS"
+
+    - name: Create a new Azure "{{ container_in_name }}" container
+      azure_rm_storageblob:
+        resource_group: "{{ resource_group_name }}"
+        storage_account_name: "{{ storage_account_name }}"
+        container: "{{ container_in_name }}"
+        auth_source: cli
+        public_access: container
+        content_type: 'application/image'
+
+    - name: Create a new Azure "{{ container_out_name }}" container
+      azure_rm_storageblob:
+        resource_group: "{{ resource_group_name }}"
+        storage_account_name: "{{ storage_account_name }}"
+        container: "{{ container_out_name }}"
+        auth_source: cli
+        public_access: container
+        content_type: 'application/image'
+...

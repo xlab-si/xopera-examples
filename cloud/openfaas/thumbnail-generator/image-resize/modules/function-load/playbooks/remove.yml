@@ -1,0 +1,14 @@
+---
+- hosts: all
+  tasks:
+  - name: Delete image-resize docker image tar file
+    file:
+      path: "/root/{{ resize_image_name }}.tar"
+      state: absent
+
+  - name: Remove docker image
+    docker_image:
+      name: "{{ resize_image_name }}"
+      force: yes
+      state: absent
+...

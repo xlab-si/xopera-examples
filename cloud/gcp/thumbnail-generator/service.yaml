@@ -1,0 +1,85 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+  - modules/bucket/bucket.yaml
+  - modules/function/function.yaml
+
+topology_template:
+  inputs:
+    host_ip:
+      type: string
+    project_id:
+      type: string
+    service_account_file:
+      type: string
+    bucket_location:
+      type: string
+    bucket_in_name:
+      type: string
+    bucket_out_name:
+      type: string
+    bucket_function_name:
+      type: string
+    function_name:
+      type: string
+    function_location:
+      type: string
+    function_runtime:
+      type: string
+    function_entry_point:
+      type: string
+    function_timeout:
+      type: string
+    function_memory:
+      type: string
+
+  node_templates:
+    workstation:
+      type: tosca.nodes.Compute
+      attributes:
+        private_address: { get_input: host_ip }
+        public_address: { get_input: host_ip }
+
+    bucket_in:
+      type: radon.nodes.gcp.bucket
+      properties:
+        bucket_name: { get_input: bucket_in_name }
+        bucket_location: { get_input: bucket_location }
+      requirements:
+        - host: workstation
+
+    bucket_out:
+      type: radon.nodes.gcp.bucket
+      properties:
+        bucket_name: { get_input: bucket_out_name }
+        bucket_location: { get_input: bucket_location }
+      requirements:
+        - host: workstation
+
+    bucket_function:
+      type: radon.nodes.gcp.bucket
+      properties:
+        bucket_name: { get_input: bucket_function_name }
+        bucket_location: { get_input: bucket_location }
+      requirements:
+        - host: workstation
+
+    gcp_function:
+      type: radon.nodes.gcp.function
+      properties:
+        bucket_in_name: { get_input: bucket_in_name }
+        bucket_out_name: { get_input: bucket_out_name }
+        bucket_function_name: { get_input: bucket_function_name }
+        function_name: { get_input: function_name }
+        function_location: { get_input: function_location }
+        function_runtime: { get_input: function_runtime }
+        function_entry_point: { get_input: function_entry_point }
+        function_timeout: { get_input: function_timeout }
+        function_memory: { get_input: function_memory }
+      requirements:
+        - host: workstation
+        - bucket_in: bucket_in
+        - bucket_out: bucket_out
+        - bucket_function: bucket_function
+...

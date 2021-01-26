@@ -1,0 +1,190 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+  - modules/azure/azure.yaml
+  - modules/transfer/transfer.yaml
+  - modules/aws/aws.yaml
+
+topology_template:
+  inputs:
+    host_ip:
+      type: string
+    # AWS inputs
+    aws_region:
+      type: string
+    role_name:
+      type: string
+    role_description:
+      type: string
+    lambda_name:
+      type: string
+    function_alias:
+      type: string
+    permission_id:
+      type: string
+    bucket_in_name:
+      type: string
+    bucket_out_name:
+      type: string
+    lambda_runtime:
+      type: string
+    lambda_handler:
+      type: string
+    lambda_timeout:
+      type: string
+    lambda_memory:
+      type: string
+    # Azure inputs
+    location:
+      type: string
+    resource_group_name:
+      type: string
+    storage_account_name:
+      type: string
+    container_in_name:
+      type: string
+    container_out_name:
+      type: string
+    function_app_name:
+      type: string
+    function_name:
+      type: string
+    event_subscription_name:
+      type: string
+    # Transfer inputs
+    transfer_function_app_name:
+      type: string
+    transfer_function_name:
+      type: string
+    transfer_event_subscription_name:
+      type: string
+    azure_container_name:
+      type: string
+    aws_bucket_name:
+      type: string
+    aws_credentials:
+      type: string
+
+  node_templates:
+    my-workstation:
+      type: tosca.nodes.Compute
+      attributes:
+        private_address: { get_input: host_ip }
+        public_address: { get_input: host_ip }
+
+    # AWS node templates
+    aws_lambda_role:
+      type: radon.policies.createRole
+      properties:
+        aws_region: { get_input: aws_region }
+        role_name: { get_input: role_name }
+        role_description: { get_input: role_description }
+      requirements:
+        - host: my-workstation
+
+    aws_lambda:
+      type: radon.nodes.function.aws_lambda
+      properties:
+        aws_region: { get_input: aws_region }
+        function_name: { get_input: lambda_name }
+        function_alias: { get_input: function_alias }
+        permission_id: { get_input: permission_id }
+        lambda_runtime: { get_input: lambda_runtime }
+        lambda_handler: { get_input: lambda_handler }
+        lambda_timeout: { get_input: lambda_timeout }
+        lambda_memory: { get_input: lambda_memory }
+        bucket_out_name: { get_input: bucket_out_name }
+      requirements:
+        - host: my-workstation
+        - requires_role: aws_lambda_role
+
+    bucket_in:
+      type: radon.nodes.s3_bucket
+      properties:
+        bucket_name: { get_input: bucket_in_name }
+        aws_region: { get_input: aws_region }
+      requirements:
+        - host: my-workstation
+
+    bucket_out:
+      type: radon.nodes.s3_bucket
+      properties:
+        bucket_name: { get_input: bucket_out_name }
+        aws_region: { get_input: aws_region }
+      requirements:
+        - host: my-workstation
+
+    bucket_notification:
+      type: radon.nodes.triggers.bucket_notification
+      properties:
+        aws_region: { get_input: aws_region }
+      requirements:
+        - host: my-workstation
+        - receives_notification: aws_lambda
+        - bucket: bucket_in
+
+    # Azure node templates
+    container_create:
+      type: radon.nodes.container_create
+      properties:
+        location: { get_input: location }
+        container_in_name: { get_input: container_in_name }
+        container_out_name: { get_input: container_out_name }
+        resource_group_name: { get_input: resource_group_name }
+        storage_account_name: { get_input: storage_account_name }
+      requirements:
+        - host: my-workstation
+
+    function_deploy:
+      type: radon.nodes.function_deploy
+      properties:
+        location: { get_input: location }
+        function_app_name: { get_input: function_app_name }
+        storage_account_name: { get_input: storage_account_name }
+        resource_group_name: { get_input: resource_group_name }
+        function_name: { get_input: function_name }
+        container_out_name: { get_input: container_out_name }
+      requirements:
+        - host: my-workstation
+
+    container_notification:
+      type: radon.nodes.container_notification
+      properties:
+        container_in_name: { get_input: container_in_name }
+        resource_group_name: { get_input: resource_group_name }
+        storage_account_name: { get_input: storage_account_name }
+        function_app_name: { get_input: function_app_name }
+        event_subscription_name: { get_input: event_subscription_name }
+        function_name: { get_input: function_name }
+      requirements:
+        - host: my-workstation
+
+    # Data transfer node templates
+    transfer_function_deploy:
+      type: radon.nodes.transfer_function_deploy
+      properties:
+        location: { get_input: location }
+        storage_account_name: { get_input: storage_account_name }
+        resource_group_name: { get_input: resource_group_name }
+        function_app_name: { get_input: transfer_function_app_name }
+        function_name: { get_input: transfer_function_name }
+        aws_credentials: { get_input: aws_credentials }
+        aws_bucket_name: { get_input: aws_bucket_name }
+      requirements:
+        - host: my-workstation
+
+    transfer_container_notification:
+      type: radon.nodes.transfer_container_notification
+      properties:
+        resource_group_name: { get_input: resource_group_name }
+        storage_account_name: { get_input: storage_account_name }
+        function_app_name: { get_input: transfer_function_app_name }
+        function_name: { get_input: transfer_function_name }
+        event_subscription_name: { get_input: transfer_event_subscription_name }
+        aws_credentials: { get_input: aws_credentials }
+        azure_container_name: { get_input: azure_container_name }
+        aws_bucket_name: { get_input: aws_bucket_name }
+      requirements:
+        - host: my-workstation
+...

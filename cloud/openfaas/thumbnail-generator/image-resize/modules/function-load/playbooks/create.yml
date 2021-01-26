@@ -1,0 +1,31 @@
+---
+- hosts: all
+  tasks:
+  - name: Yum install tools
+    yum:
+      name:
+        - python-setuptools
+        - python-pip
+      state: latest
+
+  - name: Install with pip
+    pip:
+      name:
+        - requests
+        - docker
+
+  - name: Copy image-resize docker image tar file
+    copy:
+      src: "python-docker-function.tar"
+      dest: "/root/{{ resize_image_name }}.tar"
+      owner: root
+      group: root
+      mode: "u=rw,g=r,o=r"
+
+  - name: Load docker image with image-resize functionality from tar file
+    docker_image:
+      name: "python-docker-function.tar"
+      load_path: "/root/{{ resize_image_name }}.tar"
+      source: load
+      state: present
+...

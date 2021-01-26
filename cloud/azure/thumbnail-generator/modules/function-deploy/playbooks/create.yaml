@@ -1,0 +1,32 @@
+---
+- hosts: all
+  tasks:
+  - name: Create FunctionApp on Azure portal
+    shell: "az functionapp create
+            --resource-group {{ resource_group_name }}
+            --os-type Linux \
+            --consumption-plan-location {{ location }}
+            --runtime python \
+            --runtime-version 3.7 \
+            --name {{ function_app_name }}
+            --storage-account {{ storage_account_name }}"
+
+  - name: Get connection string
+    shell: "echo $(az storage account show-connection-string -g {{ resource_group_name }} -n {{ storage_account_name }})"
+    register: azure_blob_conn_str
+
+  - name: Unpack connection string dictionary
+    debug:
+      msg: "{{item.key}}: {{item.value}}"
+    with_dict: "{{ azure_blob_conn_str.stdout }}"
+    register: conn_str_dict_item
+
+  - name: Set application settings for storage credentials
+    command: "az webapp config appsettings set -g {{ resource_group_name }}  -n {{ function_app_name }} --settings CONNECT_STR={{ conn_str_dict_item.results[0].item.value }} CONTAINER_OUT_NAME={{ container_out_name }}"
+
+  - name: Deploy function to Azure
+    shell: "func azure functionapp publish {{ function_app_name }} --build remote --python"
+    args:
+      chdir: "functions"
+    register: function_deploy_info
+...

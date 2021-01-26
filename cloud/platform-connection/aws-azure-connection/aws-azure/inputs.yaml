@@ -1,0 +1,67 @@
+---
+# This yaml file contains inputs for aws_azure_opera.yaml.
+
+# AWS
+private_address: localhost
+public_address: localhost
+aws_region: <aws-region>
+role_name: <role-name>
+role_description: <role-description>
+lambda_name: <lambda-name>
+function_alias: <alias>
+permission_id: <permission-id>
+bucket_in_name: <bucket-in-name>
+bucket_out_name: <bucket-out-name>
+lambda_runtime: <runtime>
+lambda_handler: <lambda-handler>
+lambda_timeout: <timeout-seconds>
+lambda_memory: <memory-mb>
+
+# Azure
+host_ip: <host-ip>
+resource_group_name: <resource-gropu-name>
+storage_account_name: <storage-account-name>
+container_in_name: <incoming-container-name>
+container_out_name: <result-container-name>
+function_app_name: <funtion-app-name>
+function_name: <function-name>
+event_subscription_name: <event-trigger-name>
+
+# AWS->Azure transfer via AWS Lambda
+bucket_source_name: <bucket-source-name>
+bucket_dest_name: <bucket-dest-name>
+transfer_function_name: <transfer-function-name>
+lambda_transfer_handler: <lambda-transfer-handler>
+
+
+## Inputs example:
+
+# private_address: localhost
+# public_address: localhost
+# aws_region: eu-central-1
+# role_name: RadonLambdaRole
+# role_description: Lambda role
+# lambda_name: watermarking-lambda
+# function_alias: test
+# permission_id: lambda_permission
+# bucket_in_name: radon-original
+# bucket_out_name: radon-watermarked
+# lambda_runtime: python3.6
+# lambda_handler: image_watermark.lambda_handler
+# lambda_timeout: 5
+# lambda_memory: 128
+
+# host_ip: localhost
+# resource_group_name: RADON-FaaS
+# storage_account_name: resizingstorageaccount
+# container_in_name: radon-original
+# container_out_name: radon-resized
+# function_app_name: resize-function-app
+# function_name: image-resize-function
+# event_subscription_name: thumbnail-function-trigger
+
+# bucket_source_name: radon-watermarked
+# bucket_dest_name: radon-original
+# transfer_function_name: image-transfer
+# lambda_transfer_handler: image_transfer.handler
+...

@@ -1,0 +1,70 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+  radon.nodes.function.aws_lambda:
+    derived_from: tosca.nodes.SoftwareComponent
+    properties:
+      aws_region:
+        type: string
+        description: AWS region
+      lambda_name:
+        type: string
+        description: Name of the function
+      function_alias:
+        type: string
+        description: Alias for function
+      permission_id:
+        type: string
+        description: Id of permission
+      lambda_runtime:
+        type: string
+        description: Runtime for lambda (List of possible values - https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
+      lambda_handler:
+        type: string
+        description: Handler for lambda function
+      lambda_timeout:
+        type: string
+        description: Function timeout in seconds
+      lambda_memory:
+        type: string
+        description: Function memory in MB
+      bucket_out_name:
+        type: string
+        description: Name of the bucket with results
+    attributes:
+      function_arn:
+        type: string
+        description: AWS function arn
+    interfaces:
+      Standard:
+        type: tosca.interfaces.node.lifecycle.Standard
+        inputs:
+          lambda_name: {default: { get_property: [SELF, lambda_name] }, type: string }
+          aws_region: {default: { get_property: [SELF, aws_region] }, type: string }
+          aws_role: {default: {get_attribute: [SELF, requires_role, role_arn] }, type: string }
+          func_alias: {default: { get_property: [SELF, function_alias] }, type: string }
+          permission_id: {default: { get_property: [SELF, permission_id] }, type: string }
+          lambda_runtime: {default: { get_property: [SELF, lambda_runtime] }, type: string }
+          lambda_handler: {default: { get_property: [SELF, lambda_handler] }, type: string }
+          lambda_timeout: {default: { get_property: [SELF, lambda_timeout] }, type: string }
+          lambda_memory: {default: { get_property: [SELF, lambda_memory] }, type: string }
+          bucket_out_name: {default: { get_property: [SELF, bucket_out_name] }, type: string }
+        operations:
+          create:
+            implementation:
+              primary: playbooks/create.yaml
+              dependencies:
+                - playbooks/function
+    capabilities:
+      receives_notification:
+        type: tosca.capabilities.Compute
+        valid_source_types: [radon.nodes.triggers.bucket_notification]
+    requirements:
+      - bucket:
+          capability: tosca.capabilities.Node
+          relationship: tosca.relationships.DependsOn
+      - requires_role:
+          capability: tosca.capabilities.Node
+          relationship: tosca.relationships.DependsOn
+...
