@@ -67,19 +67,21 @@ will have an already known value of attribute `id` representing exactly the
 information that the client needs. Hence, using
 `get_attribute: [ SELF, server, id]` works.
 
-
 # Running with xOpera
 Having gone through all that, let's now finally run the service template:
 
 ```console
 (venv) $ cd misc/server-client
 (venv) misc/server-client$ opera deploy service.yaml
-  Deploying my-workstation_0
-  Deploying my-mock-server_0
-    Executing create on my-mock-server_0
-  Deploying my-mock-client_0
-    Executing create on my-mock-client_0
-    Executing configure on my-mock-client_0
+[Worker_0]   Deploying my-workstation_0
+[Worker_0]   Deployment of my-workstation_0 complete
+[Worker_0]   Deploying my-mock-server_0
+[Worker_0]     Executing create on my-mock-server_0
+[Worker_0]   Deployment of my-mock-server_0 complete
+[Worker_0]   Deploying my-mock-client_0
+[Worker_0]     Executing create on my-mock-client_0
+[Worker_0]     Executing configure on my-mock-client_0
+[Worker_0]   Deployment of my-mock-client_0 complete
 ```
 
 The output shows that the order in which the node templates are instantiated

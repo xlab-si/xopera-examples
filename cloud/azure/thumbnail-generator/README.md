@@ -21,12 +21,9 @@ The main functionality of image-resize is to create thumbnails from the source i
 source bucket and then three thumbnails will be created and saved to another bucket.
 
 ## Quick test and deploy
-
 If you want to test this solution immediately run the following commands:
 
-> :pencil: I you face any problems consider reading the whole manual!
-
-```shell script
+```console
 # install Azure CLI and try to login in your account
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 az login
@@ -58,7 +55,7 @@ This topic explains prerequisites to run xOpera deploy via Azure. If you want to
 
 To be able to run these roles you should use virtual environment, install the latest Ansible version.
 
-```bash
+```console
 python3 -m venv .venv
 . .venv/bin/activate
 pip install --upgrade pip
@@ -73,7 +70,7 @@ using `az login` command. This is important because user gets authenticated via 
 
 The next thing is to set up the Azure function tools using the commands below:
 
-```bash
+```console
 wget -q https://packages.microsoft.com/config/ubuntu/19.04/packages-microsoft-prod.deb
 sudo dpkg -i packages-microsoft-prod.deb
 sudo apt-get update
@@ -123,4 +120,5 @@ Currently the following values can be modified:
 The file with inputs is later passed to xOpera at the beginning of the orchestration.
 
 ## Running with xOpera
-You can run xOpera resize service with `opera deploy -i inputs.yaml service.yaml`
+You can run xOpera resize service with `opera deploy -i inputs.yaml service.yaml` 
+Run `opera undeploy` to un-deploy the solution.

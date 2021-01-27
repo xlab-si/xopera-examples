@@ -36,7 +36,7 @@ node_types:
           credentials: {default: { get_property: [SELF, credentials] }, type: string }
         operations:
           create:
-            implementation: playbooks/create.yml
+            implementation: playbooks/create.yaml
           delete:
-            implementation: playbooks/remove.yml
+            implementation: playbooks/remove.yaml
 ...

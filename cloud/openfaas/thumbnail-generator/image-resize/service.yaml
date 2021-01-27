@@ -2,10 +2,10 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
 
 imports:
-  - modules/bucket-create/bucket.yml
-  - modules/function-load/function-load.yml
-  - modules/function-deploy/function-deploy.yml
-  - modules/bucket-notification/bucket-notification.yml
+  - modules/bucket-create/bucket.yaml
+  - modules/function-load/function-load.yaml
+  - modules/function-deploy/function-deploy.yaml
+  - modules/bucket-notification/bucket-notification.yaml
 
 topology_template:
   inputs:

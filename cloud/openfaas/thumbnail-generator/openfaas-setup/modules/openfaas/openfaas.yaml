@@ -9,5 +9,5 @@ node_types:
         type: tosca.interfaces.node.lifecycle.Standard
         operations:
           create:
-            implementation: playbooks/create.yml
+            implementation: playbooks/create.yaml
 ...

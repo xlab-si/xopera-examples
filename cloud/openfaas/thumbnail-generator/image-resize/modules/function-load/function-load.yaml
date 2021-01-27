@@ -2,22 +2,17 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
 
 node_types:
-  radon.nodes.function_deploy:
+  radon.nodes.function_load:
     derived_from: tosca.nodes.SoftwareComponent
     properties:
       resize_image_name:
         type: string
         description: Name of already existing image with image-resize functionality.
-      resize_function_name:
-        type: string
-        description: Name of the new OpenFaaS image-resize function.
       node_ip:
         type: string
         description: IP of the VM running the OpenFaaS
     attributes:
       resize_image_name:
-        type: string
-      resize_function_name:
         type: string
       node_ip:
         type: string
@@ -26,11 +21,14 @@ node_types:
         type: tosca.interfaces.node.lifecycle.Standard
         inputs:
           resize_image_name: {default: { get_property: [SELF, resize_image_name] }, type: string }
-          resize_function_name: {default: { get_property: [SELF, resize_function_name] }, type: string }
-          node_ip: {default: { get_property: [SELF, node_ip] }, type: string }
+          node_ip: {default: { get_property: [SELF, node_ip] }, type: string}
         operations:
           create:
-            implementation: playbooks/create.yml
+            implementation:
+              primary: playbooks/create.yaml
+              # uncomment path to created Docker image tar file
+              # dependencies:
+                # - docker-image-templates/python-docker-function.tar
           delete:
-            implementation: playbooks/remove.yml
+            implementation: playbooks/remove.yaml
 ...

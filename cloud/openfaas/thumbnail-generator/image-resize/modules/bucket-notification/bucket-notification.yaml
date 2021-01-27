@@ -37,9 +37,9 @@ node_types:
         operations:
           create:
             implementation:
-              primary: playbooks/create.yml
+              primary: playbooks/create.yaml
               dependencies:
                 - playbooks/files/bucket-notification.py
           delete:
-            implementation: playbooks//remove.yml
+            implementation: playbooks//remove.yaml
 ...

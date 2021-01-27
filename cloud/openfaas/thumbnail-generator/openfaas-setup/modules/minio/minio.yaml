@@ -25,7 +25,7 @@ node_types:
         operations:
           create:
             implementation:
-              primary: playbooks/create.yml
+              primary: playbooks/create.yaml
               dependencies:
                 - playbooks/templates/config.json
 ...

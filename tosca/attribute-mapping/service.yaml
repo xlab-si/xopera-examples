@@ -62,7 +62,6 @@ relationship_types:
 
 
 topology_template:
-
   node_templates:
 
     student-ben:

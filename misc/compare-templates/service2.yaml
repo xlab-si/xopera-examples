@@ -23,7 +23,7 @@ topology_template:
       artifacts:
         def_file:
           type: tosca.artifacts.File
-          file: files/file1_2.yaml
+          file: lib/files/file1_2.yaml
       requirements:
         - host: my-workstation
 
@@ -34,7 +34,7 @@ topology_template:
       artifacts:
         def_file:
           type: tosca.artifacts.File
-          file: files/file2.yaml
+          file: lib/files/file2.yaml
       capabilities:
         test:
           properties:
@@ -65,7 +65,7 @@ topology_template:
       artifacts:
         def_file:
           type: tosca.artifacts.File
-          file: files/file2.yaml
+          file: lib/files/file2.yaml
       requirements:
         - dependency: hello-2
         - host: my-workstation

@@ -2,7 +2,7 @@
 - hosts: localhost
   tasks:
   - name: Include yaml variables
-    include_vars: ../inputs.yml
+    include_vars: ../inputs.yaml
 
   - name: Install with pip
     pip:

@@ -9,7 +9,7 @@ This is a hello world TOSCA template for xOpera.
 The `service.yaml` within this directory shows a minimal service template that is composed of two node templates:
 
 - `hello`: a node template of type `tosca.nodes.SoftwareComponent` that
-  invokes the `playbooks/hello/create.yml` Ansible playbook as its
+  invokes the `playbooks/hello/create.yaml` Ansible playbook as its
   `create` interface.
 - `my-workstation`: this node template is necessary to fulfil the
   `hello`'s requirement for capability `host`. By assigning `localhost`
@@ -23,10 +23,12 @@ We can run our hello-world as follows:
 
 ```console
 (venv) $ cd misc/hello-world
-(venv) 01-hello-world$ opera deploy service.yaml
-  Deploying my-workstation_0
-  Deploying hello_0
-    Executing create on hello_0
+(venv) misc/hello-world$ opera deploy service.yaml
+[Worker_0]   Deploying my-workstation_0
+[Worker_0]   Deployment of my-workstation_0 complete
+[Worker_0]   Deploying hello_0
+[Worker_0]     Executing create on hello_0
+[Worker_0]   Deployment of hello_0 complete
 ```
 
 The result of this service template should be a new directory and a file on
@@ -42,10 +44,12 @@ The solution can be also undeployed:
 
 ```console
 (venv) $ cd misc/hello-world
-(venv) 01-hello-world$ opera undeploy
-  Undeploying hello_0
-    Executing delete on hello_0
-  Undeploying my-workstation_0
+(venv) misc/hello-world$ opera undeploy
+[Worker_0]   Undeploying hello_0
+[Worker_0]     Executing delete on hello_0
+[Worker_0]   Undeployment of hello_0 complete
+[Worker_0]   Undeploying my-workstation_0
+[Worker_0]   Undeployment of my-workstation_0 complete
 ```
 
 After that the created directory and file are deleted:
