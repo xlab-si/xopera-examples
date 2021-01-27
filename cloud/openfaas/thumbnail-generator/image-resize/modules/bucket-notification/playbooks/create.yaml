@@ -1,23 +1,23 @@
 ---
 - hosts: all
   tasks:
-  - name: Install prerequsiste python3 packages
-    pip:
-      name:
-        - minio==5.0.1
-      state: latest
+    - name: Install prerequsiste python3 packages
+      pip:
+        name:
+          - minio==5.0.1
+        state: latest
 
-  - name : Copy python script
-    template:
-      src: "bucket-notification.py"
-      dest: "/root/bucket-notification.py"
+    - name: Copy python script
+      template:
+        src: "bucket-notification.py"
+        dest: "/root/bucket-notification.py"
 
-  - name: Kill all bucket notification processes
-    shell: "kill $(ps -ef | grep 'bucket-notification.py' | awk '{print $2}')"
-    ignore_errors: true
+    - name: Kill all bucket notification processes
+      shell: "kill $(ps -ef | grep 'bucket-notification.py' | awk '{print $2}')"
+      ignore_errors: true
 
-  - name: Run python script and listen to bucket notifications
-    shell: "python /root/bucket-notification.py &"
-    async: 30
-    poll: 0
+    - name: Run python script and listen to bucket notifications
+      shell: "python /root/bucket-notification.py &"
+      async: 30
+      poll: 0
 ...

@@ -1,10 +1,11 @@
 import json
 import logging
 import os
-from .azure_helper import Azure
 
 import azure.functions as func
 from PIL import Image
+
+from .azure_helper import Azure
 
 '''
 Azure function for resizing images

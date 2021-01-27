@@ -1,5 +1,6 @@
-import boto3
 import os
+
+import boto3
 from PIL import Image
 
 s3_client = boto3.client('s3')

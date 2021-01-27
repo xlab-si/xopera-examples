@@ -1,12 +1,12 @@
 ---
 - hosts: all
   tasks:
-  - name: Kill all bucket notification processes
-    shell: "kill $(ps -ef | grep 'bucket-notification.py' | awk '{print $2}')"
-    ignore_errors: true
+    - name: Kill all bucket notification processes
+      shell: "kill $(ps -ef | grep 'bucket-notification.py' | awk '{print $2}')"
+      ignore_errors: true
 
-  - name: Delete bucket notification python file
-    file:
-      path: "/root/bucket-notification.py"
-      state: absent
+    - name: Delete bucket notification python file
+      file:
+        path: "/root/bucket-notification.py"
+        state: absent
 ...

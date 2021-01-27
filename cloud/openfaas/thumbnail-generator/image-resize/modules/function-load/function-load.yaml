@@ -26,9 +26,9 @@ node_types:
           create:
             implementation:
               primary: playbooks/create.yaml
-              # uncomment path to created Docker image tar file
-              # dependencies:
-                # - docker-image-templates/python-docker-function.tar
+                # uncomment path to created Docker image tar file
+                # dependencies:
+              # - docker-image-templates/python-docker-function.tar
           delete:
             implementation: playbooks/remove.yaml
 ...

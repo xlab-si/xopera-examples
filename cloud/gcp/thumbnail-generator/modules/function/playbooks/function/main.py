@@ -1,6 +1,7 @@
-from wand.image import Image
-from google.cloud import storage
 import os
+
+from google.cloud import storage
+from wand.image import Image
 
 ''' 
 GCP function for thumbnail generation

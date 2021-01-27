@@ -1,25 +1,25 @@
 ---
 - hosts: all
   tasks:
-  - name: POST request for OpenFaaS API that deploys a new image-resize function
-    uri:
-      url: "http://{{ node_ip }}:8080/system/functions"
-      method: POST
-      body: "{  \"service\": \"{{ resize_function_name }}\",  \"network\": \"func_functions\",  \"image\": \"{{ resize_image_name }}:latest\",  \"envProcess\": \"python index.py\" }"
-      body_format: json
-      status_code: 202
-    register: post_result
-    check_mode: false
-    ignore_errors: true
-    changed_when: false
+    - name: POST request for OpenFaaS API that deploys a new image-resize function
+      uri:
+        url: "http://{{ node_ip }}:8080/system/functions"
+        method: POST
+        body: "{  \"service\": \"{{ resize_function_name }}\",  \"network\": \"func_functions\",  \"image\": \"{{ resize_image_name }}:latest\",  \"envProcess\": \"python index.py\" }"
+        body_format: json
+        status_code: 202
+      register: post_result
+      check_mode: false
+      ignore_errors: true
+      changed_when: false
 
-  - name: PUT request if POST fails (update function deploy) for the image-resize function
-    uri:
-      url: "http://{{ node_ip }}:8080/system/functions"
-      method: PUT
-      body: "{  \"service\": \"{{ resize_function_name }}\",  \"network\": \"func_functions\",  \"image\": \"{{ resize_image_name }}:latest\",  \"envProcess\": \"python index.py\" }"
-      body_format: json
-      status_code: 202
-    ignore_errors: true
-    when: post_result["non_existent_tag"] is not defined
+    - name: PUT request if POST fails (update function deploy) for the image-resize function
+      uri:
+        url: "http://{{ node_ip }}:8080/system/functions"
+        method: PUT
+        body: "{  \"service\": \"{{ resize_function_name }}\",  \"network\": \"func_functions\",  \"image\": \"{{ resize_image_name }}:latest\",  \"envProcess\": \"python index.py\" }"
+        body_format: json
+        status_code: 202
+      ignore_errors: true
+      when: post_result["non_existent_tag"] is not defined
 ...

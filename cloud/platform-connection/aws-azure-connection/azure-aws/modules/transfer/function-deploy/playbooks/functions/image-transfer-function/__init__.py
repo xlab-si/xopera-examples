@@ -1,9 +1,11 @@
 import json
 import logging
 import os
-import boto3
-from .azure_helper import Azure
+
 import azure.functions as func
+import boto3
+
+from .azure_helper import Azure
 
 '''
 Azure function for resizing images

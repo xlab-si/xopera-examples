@@ -1,6 +1,7 @@
-from PIL import Image
-import boto3
 import os
+
+import boto3
+from PIL import Image
 
 s3_client = boto3.client('s3')
 # get env var for bucket with results
@@ -27,7 +28,7 @@ def watermark_image(original_img_path, watermarked_img_path):
             wm_height = wm.height
             img_wm = image
             padding = 20
-            if org_width >= wm_width + padding\
+            if org_width >= wm_width + padding \
                     and org_height >= wm_height + padding:
                 # shift to bottom right with padding
                 x_delta = org_width - wm_width - padding

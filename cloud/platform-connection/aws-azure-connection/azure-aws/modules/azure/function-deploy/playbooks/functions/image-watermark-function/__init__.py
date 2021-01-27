@@ -1,10 +1,11 @@
 import json
 import logging
 import os
-from .azure_helper import Azure
 
 import azure.functions as func
 from PIL import Image
+
+from .azure_helper import Azure
 
 '''
 Azure function for watermarking images
@@ -104,5 +105,3 @@ def watermark_image(original_img_path, watermarked_img_path, watermark_path):
                         if px.count(255) != 3:
                             img_wm.putpixel((x + x_delta, y + y_delta), px)
                 img_wm.save(watermarked_img_path)
-
-

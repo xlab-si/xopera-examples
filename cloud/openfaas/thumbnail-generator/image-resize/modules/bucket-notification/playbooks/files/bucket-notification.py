@@ -1,5 +1,5 @@
-from minio import Minio
 import requests
+from minio import Minio
 
 node_ip = "{{ node_ip }}"
 access_key_minio = "{{ credentials.minio_access_key }}"
