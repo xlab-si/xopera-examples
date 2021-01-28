@@ -1,0 +1,42 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+  radon.nodes.bucket_create:
+    derived_from: tosca.nodes.SoftwareComponent
+    properties:
+      bucket_in_name:
+        type: string
+        description: The name of incoming the bucket
+      bucket_out_name:
+        type: string
+        description: The name of the bucket with results
+      minio_ip:
+        type: string
+        description: IP address of the MiniIO object storage
+      credentials:
+        type: string
+        description: MiniIO credentials
+    attributes:
+      bucket_in_name:
+        type: string
+      bucket_out_name:
+        type: string
+      minio_ip:
+        type: string
+      credentials:
+        type: string
+    interfaces:
+      Standard:
+        type: tosca.interfaces.node.lifecycle.Standard
+        inputs:
+          bucket_in_name: {default: { get_property: [SELF, bucket_in_name] }, type: string }
+          bucket_out_name: {default: { get_property: [SELF, bucket_out_name] }, type: string }
+          minio_ip: {default: { get_property: [SELF, minio_ip] }, type: string }
+          credentials: {default: { get_property: [SELF, credentials] }, type: string }
+        operations:
+          create:
+            implementation: playbooks/create.yaml
+          delete:
+            implementation: playbooks/remove.yaml
+...

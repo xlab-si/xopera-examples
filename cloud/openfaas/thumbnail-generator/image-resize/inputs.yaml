@@ -1,0 +1,16 @@
+---
+host_ip: <your-host-ip>
+credentials: "{{ lookup('file','/tmp/credentials.json') }}"
+bucket_in_name: <bucket-in-name>
+bucket_out_name: <bucket-out-name>
+resize_image_name: <resize-image-name>
+resize_function_name: <resize-function-name>
+
+### Example:
+# host_ip: localhost
+# credentials: "{{ lookup('file','/tmp/credentials.json') }}"
+# bucket_in_name: oroginal
+# bucket_out_name: resized
+# resize_image_name: python-image-resize
+# resize_function_name: image-resize-function
+...

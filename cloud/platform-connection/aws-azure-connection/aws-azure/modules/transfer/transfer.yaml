@@ -1,0 +1,7 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+  - lambda/transfer_lambda.yaml
+  - bucket_notification/transfer_bucket_notification.yaml
+...

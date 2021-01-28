@@ -1,0 +1,73 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+  - modules/container-create/container.yaml
+  - modules/function-deploy/function-deploy.yaml
+  - modules/container-notification/container-notification.yaml
+
+topology_template:
+  inputs:
+    host_ip:
+      type: string
+    location:
+      type: string
+    resource_group_name:
+      type: string
+    storage_account_name:
+      type: string
+    container_in_name:
+      type: string
+    container_out_name:
+      type: string
+    function_app_name:
+      type: string
+    function_name:
+      type: string
+    event_subscription_name:
+      type: string
+
+  node_templates:
+    my-workstation:
+      type: tosca.nodes.Compute
+      attributes:
+        private_address: { get_input: host_ip }
+        public_address: { get_input: host_ip }
+
+    container_create:
+      type: radon.nodes.container_create
+      properties:
+        container_in_name: { get_input: container_in_name }
+        container_out_name: { get_input: container_out_name }
+        resource_group_name: { get_input: resource_group_name }
+        storage_account_name: { get_input: storage_account_name }
+        location: { get_input: location }
+      requirements:
+        - host: my-workstation
+
+    function_deploy:
+      type: radon.nodes.function_deploy
+      properties:
+        node_ip: { get_input: host_ip }
+        function_app_name: { get_input: function_app_name }
+        storage_account_name: { get_input: storage_account_name }
+        resource_group_name: { get_input: resource_group_name }
+        function_name: { get_input: function_name }
+        container_out_name: { get_input: container_out_name }
+        location: { get_input: location }
+      requirements:
+        - host: my-workstation
+
+    container_notification:
+      type: radon.nodes.container_notification
+      properties:
+        node_ip: { get_input: host_ip }
+        container_in_name: { get_input: container_in_name }
+        resource_group_name: { get_input: resource_group_name }
+        storage_account_name: { get_input: storage_account_name }
+        function_app_name: { get_input: function_app_name }
+        event_subscription_name: { get_input: event_subscription_name }
+        function_name: { get_input: function_name }
+      requirements:
+        - host: my-workstation
+...

@@ -1,0 +1,91 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+  radon.nodes.aws_lambda_transfer:
+    derived_from: tosca.nodes.SoftwareComponent
+    properties:
+      transfer_function_name:
+        type: string
+        description: Name of AWS transfer image function.
+      aws_region:
+        type: string
+        description: AWS region.
+      role_name:
+        type: string
+        description: AWS role.
+      function_alias:
+        type: string
+        description: Alias for function.
+      permission_id:
+        type: string
+        description: Id of permission.
+      lambda_runtime:
+        type: string
+        description: Runtime for lambda (List of possible values - https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
+      lambda_transfer_handler:
+        type: string
+        description: Handler for transfer lambda function.
+      lambda_timeout:
+        type: string
+        description: Function timeout in seconds.
+      lambda_memory:
+        type: string
+        description: Function memory in MB.
+      bucket_dest_name:
+        type: string
+        description: Name of the destination bucket.
+    attributes:
+      function_arn:
+        type: string
+        description: AWS function arn
+      transfer_function_name:
+        type: string
+      aws_region:
+        type: string
+      role_name:
+        type: string
+      function_alias:
+        type: string
+      permission_id:
+        type: string
+      lambda_runtime:
+        type: string
+      lambda_transfer_handler:
+        type: string
+      lambda_timeout:
+        type: string
+      lambda_memory:
+        type: string
+      bucket_dest_name:
+        type: string
+    interfaces:
+      Standard:
+        type: tosca.interfaces.node.lifecycle.Standard
+        inputs:
+          transfer_function_name: {default: { get_property: [SELF, transfer_function_name] }, type: string }
+          lambda_runtime: {default: { get_property: [SELF, lambda_runtime] }, type: string }
+          aws_region: {default: { get_property: [SELF, aws_region] }, type: string }
+          role_name: {default: { get_property: [SELF, role_name] }, type: string }
+          lambda_transfer_handler: {default: { get_property: [SELF, lambda_transfer_handler] }, type: string }
+          lambda_timeout: {default: { get_property: [SELF, lambda_timeout] }, type: string }
+          lambda_memory: {default: { get_property: [SELF, lambda_memory] }, type: string }
+          bucket_dest_name: {default: { get_property: [SELF, bucket_dest_name] }, type: string }
+          connection_string: {default:  {get_attribute: [SELF, connection_str, azure_connection_string] }, type: string }
+          function_alias: {default: { get_property: [SELF, function_alias] }, type: string }
+          permission_id: {default: { get_property: [SELF, permission_id] }, type: string }
+        operations:
+          create:
+            implementation:
+              primary: playbooks/create.yaml
+              dependencies:
+                - playbooks/function
+    capabilities:
+      receives_notification:
+        type: tosca.capabilities.Compute
+        valid_source_types: [radon.nodes.aws_transfer_notification]
+    requirements:
+      - connection_str:
+          capability: tosca.capabilities.Compute
+          relationship: tosca.relationships.DependsOn
+...

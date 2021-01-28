@@ -1,0 +1,25 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+relationship_types:
+  daily_test.relationships.test:
+    derived_from: tosca.relationships.HostedOn
+    attributes:
+      relationship_attribute:
+        type: string
+    properties:
+      relationship_property:
+        type: string
+        default: test123
+        required: true
+    interfaces:
+      Configure:
+        operations:
+          pre_configure_source:
+            inputs:
+              relationship_property:
+                default: { get_property: [ SELF, relationship_property ] }
+                type: string
+            implementation:
+              primary: playbooks/test.yaml
+...

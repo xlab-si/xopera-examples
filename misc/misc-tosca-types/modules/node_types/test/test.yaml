@@ -1,0 +1,49 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+  - ../../artifact_types/test/test.yaml
+  - ../../capability_types/test/test.yaml
+  - ../../data_types/test/test.yaml
+  - ../../interface_types/test/test.yaml
+  - ../../policy_types/test/test.yaml
+  - ../../relationship_types/test/test.yaml
+  - ../../relationship_types/interfaces/interfaces.yaml
+
+node_types:
+  daily_test.nodes.test:
+    derived_from: tosca.nodes.Root
+    metadata:
+      targetNamespace: "daily_test.nodes.test"
+      abstract: "false"
+      final: "false"
+    properties:
+      test:
+        type: daily_test.datatypes.test
+        required: false
+    interfaces:
+      Standard:
+        operations:
+          create:
+            inputs:
+              capability_attribute_input: { default: { get_attribute: [ SELF, test_capability, capability_attribute ] }, type: string }
+              capability_property_input: { default: { get_property: [ SELF, test_capability, capability_property ] }, type: string }
+            implementation:
+              primary: playbooks/create.yaml
+      test:
+        type: daily_test.interfaces.test
+    artifacts:
+      test:
+        type: daily_test.artifacts.test
+        file: file.test
+    capabilities:
+      test_capability:
+        type: daily_test.capabilities.test
+    requirements:
+      - host1:
+          capability: tosca.capabilities.Compute
+          relationship: daily_test.relationships.test
+      - host2:
+          capability: tosca.capabilities.Compute
+          relationship: daily_test.relationships.interfaces
+...

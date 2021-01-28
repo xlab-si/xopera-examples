@@ -1,0 +1,69 @@
+---
+- hosts: all
+  tasks:
+    - name: Install prerequisite packages
+      package:
+        name: python3-setuptools
+        state: latest
+    - name: Add the Docker repo key Debian
+      apt_key:
+        id: "0EBFCD88"
+        url: "https://download.docker.com/linux/debian/gpg"
+        state: present
+      when: ansible_os_family == 'Debian'
+
+    - name: Figure out the correct architecture (x86)
+      set_fact:
+        docker_arch: amd64
+      when: (ansible_machine is defined and (ansible_machine == 'x86' or ansible_machine == 'x86_64' or ansible_machine == 'i686' or ansible_machine == 'i386')) or (ansible_userspace_architecture is defined and (ansible_userspace_architecture == 'x86' or ansible_userspace_architecture == 'x86_64' or ansible_userspace_architecture == 'i686' or ansible_userspace_architecture == 'i386'))
+
+    - name: Figure out the correct architecture (armhf)
+      set_fact:
+        docker_arch: armhf
+      when: docker_arch is not defined
+
+    - name: Add the Docker repositories (Ubuntu)
+      apt_repository:
+        repo: "{{ item.src }}"
+        state: present
+        filename: "{{ item.name }}"
+        update_cache: true
+      with_items:
+        - name: docker-ce
+          src: "deb [arch={{ docker_arch }}] https://download.docker.com/linux/{{ linux_distro }} {{ linux_release }} stable"
+      when: ansible_distribution == 'Ubuntu'
+
+    - name: Install Docker packages
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+      register: docker_package
+
+    - name: Ensure the Docker group exists
+      group:
+        name: docker
+        state: present
+
+    - name: Add users to the Docker group
+      user:
+        name: "Docker"
+        groups: docker
+        append: true
+
+    - name: Ensure the docker configuration directory exists
+      file:
+        path: /etc/docker/
+        state: directory
+        owner: root
+        group: root
+
+    - name: Fix permissions for /etc/docker/ (bug triage)
+      file:
+        path: /etc/docker/
+        state: directory
+        mode: 0755
+...

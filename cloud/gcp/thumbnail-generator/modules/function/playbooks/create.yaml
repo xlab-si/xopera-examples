@@ -1,0 +1,61 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Install prerequsiste packages
+      pip:
+        name:
+          - requests>=2.18.4
+          - google-auth>=1.3.0
+          - google-cloud==0.34.0
+        state: latest
+
+    - name: Compress function and its requirements into a zip file
+      archive:
+        format: zip
+        path: "function/"
+        dest: "function.zip"
+
+    - name: Authenticate to GCP with service account JSON key file
+      shell: "gcloud auth activate-service-account --key-file {{ service_account_file }}"
+
+    - name: Upload zip archive with function to the GCP bucket
+      shell: "gsutil cp function.zip gs://{{ bucket_function_name }}/function.zip"
+
+    # The gcp_storage_object module would be used instead of the two shell commands above but unluckily this module does not
+    # work when uploading zip files to bucket and fails with: UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe2 in
+    # position 10: invalid continuation byte. Also take look at this issue: https://github.com/ansible/ansible/pull/59759.
+    #
+    #    - name: Upload zip archive with function to the GCP bucket
+    #      gcp_storage_object:
+    #        action: upload
+    #        bucket: "{{ bucket_function_name }}"
+    #        src: "function.zip"
+    #        dest: "function.zip"
+    #        overwrite: yes
+    #        project: "{{ project_id }}"
+    #        auth_kind: serviceaccount
+    #        service_account_file: "{{ service_account_file }}"
+    #
+    # Things get even uglier when you realize that gcp_cloudfunctions_cloud_function Ansible module does not allow uploads
+    # from local machine which is weird because on the other hand you can upload a local file with 'gcloud functions deploy'
+    # CLI command. Issue on GitHub that tracks this problem: https://github.com/ansible-collections/google.cloud/issues/234.
+
+    - name: Create a new Google Cloud function
+      gcp_cloudfunctions_cloud_function:
+        name: "{{ function_name }}"
+        location: "{{ function_location }}"
+        runtime: "{{ function_runtime }}"
+        timeout: "{{ function_timeout }}"
+        available_memory_mb: "{{ function_memory }}"
+        entry_point: "entry_point"
+        source_archive_url: "gs://{{ bucket_function_name }}/function.zip"
+        event_trigger:
+          event_type: "google.storage.object.finalize"
+          resource: "projects/_/buckets/{{ bucket_in_name }}"
+        project: "{{ project_id }}"
+        auth_kind: serviceaccount
+        service_account_file: "{{ service_account_file }}"
+        environment_variables:
+          BUCKET_OUT_NAME: "{{ bucket_out_name }}"
+...

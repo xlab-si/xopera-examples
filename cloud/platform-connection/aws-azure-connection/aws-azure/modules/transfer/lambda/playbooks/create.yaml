@@ -1,0 +1,50 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Install prerequsiste packages
+      command: "pip install -r 'function/requirements.txt' -t 'function/'"
+
+    - name: Compress function an requirements into zip file
+      archive:
+        format: zip
+        path: "function/"
+        dest: "function.zip"
+
+    - name: "Lambda {{ transfer_function_name }} deploy with env vars"
+      lambda:
+        name: "{{ transfer_function_name }}"
+        zip_file: "function.zip"
+        runtime: "{{ lambda_runtime }}"
+        region: "{{ aws_region }}"
+        role: "{{ role_name }}"
+        handler: "{{ lambda_transfer_handler }}"
+        timeout: "{{ lambda_timeout }}"
+        memory_size: "{{ lambda_memory }}"
+        environment_variables:
+          TRANSFER_BUCKET_NAME: "{{ bucket_dest_name }}"
+          CONNECT_STR: "{{ connection_string }}"
+      register: lambda_info
+
+    - name: Create function alias name
+      lambda_alias:
+        function_name: "{{ transfer_function_name }}"
+        name: "{{ function_alias }}"
+        region: "{{ aws_region }}"
+        state: present
+      register: alias_info
+
+    - name: "Add invocation permission of Lambda function on AWS : {{ permission_id }}"
+      lambda_policy:
+        function_name: "{{ transfer_function_name }}"
+        statement_id: "{{ permission_id }}"
+        action: lambda:InvokeFunction
+        region: "{{ aws_region }}"
+        alias: "{{ function_alias }}"
+        principal: "s3.amazonaws.com"
+
+    - name: Set attributes
+      set_stats:
+        data:
+          function_arn: "{{ alias_info.alias_arn }}"
+...

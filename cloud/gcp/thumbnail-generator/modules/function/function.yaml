@@ -1,0 +1,79 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+  radon.nodes.gcp.function:
+    derived_from: tosca.nodes.SoftwareComponent
+    properties:
+      function_name:
+        type: string
+        description: Name of the GCP function
+      function_location:
+        type: string
+        description: GCP function region
+      bucket_in_name:
+        type: string
+        description: Name of the original GCP bucket
+      bucket_out_name:
+        type: string
+        description: Name of the resized GCP bucket
+      bucket_function_name:
+        type: string
+        description: Name of the GCP bucket containing zipped GCP function
+      function_runtime:
+        type: string
+        description: Runtime environment for GCP function
+      function_entry_point:
+        type: string
+        description: The name of the function that will be executed
+      function_timeout:
+        type: string
+        description: The function execution timeout
+      function_memory:
+        type: string
+        description: The amount of available function memory in MB
+    interfaces:
+      Standard:
+        type: tosca.interfaces.node.lifecycle.Standard
+        inputs:
+          function_name:
+            default: { get_property: [ SELF, function_name ] }
+            type: string
+          function_location:
+            default: { get_property: [ SELF, function_location ] }
+            type: string
+          bucket_in_name:
+            default: { get_property: [ SELF, bucket_in_name ] }
+            type: string
+          bucket_out_name:
+            default: { get_property: [ SELF, bucket_out_name ] }
+            type: string
+          bucket_function_name:
+            default: { get_property: [ SELF, bucket_function_name ] }
+            type: string
+          function_runtime:
+            default: { get_property: [ SELF, function_runtime ] }
+            type: string
+          function_entry_point:
+            default: { get_property: [ SELF, function_entry_point ] }
+            type: string
+          function_timeout:
+            default: { get_property: [ SELF, function_timeout ] }
+            type: string
+          function_memory:
+            default: { get_property: [ SELF, function_memory ] }
+            type: string
+          project_id:
+            default: { get_input: project_id }
+            type: string
+          service_account_file:
+            default: { get_input: service_account_file }
+            type: string
+        operations:
+          create:
+            implementation:
+              primary: playbooks/create.yaml
+              dependencies:
+                - playbooks/function
+          delete: playbooks/delete.yaml
+...

@@ -1,0 +1,9 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+  - aws_role/aws_role.yaml
+  - lambda/aws_lambda.yaml
+  - bucket/aws_bucket.yaml
+  - bucket_notification/aws_bucket_notification.yaml
+...

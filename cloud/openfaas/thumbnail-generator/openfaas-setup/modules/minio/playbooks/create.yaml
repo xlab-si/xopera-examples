@@ -1,0 +1,60 @@
+---
+- hosts: all
+  tasks:
+    - name: Install prerequsiste packages
+      package:
+        name:
+          - python-pip
+          - python3-pip
+          - python3-setuptools
+          - python3-venv
+        state: present
+
+    - name: Install prerequsiste python3 packages
+      pip:
+        name:
+          - docker==4.0.2
+        state: latest
+
+    - name: Run MinIO object storage in docker container
+      docker_container:
+        name: minio
+        image: minio/minio
+        command: "server /data"
+        pull: true
+        published_ports:
+          - 9000:9000
+        state: started
+        restart_policy: unless-stopped
+        env:
+          MINIO_ACCESS_KEY: "{{ credentials.minio_access_key }}"
+          MINIO_SECRET_KEY: "{{ credentials.minio_secret_key }}"
+
+    - name: Install minIO Client (mc) to docker container
+      get_url:
+        url: https://dl.min.io/client/mc/release/linux-amd64/mc
+        dest: /root
+        mode: 'u=rwx,g=rx,o=rx'
+
+    - name: Move mc program to /bin/
+      shell: "mv mc /bin/"
+
+    - name: Remove any existing minio configurations
+      file:
+        state: absent
+        path: "/tmp/config.json"
+
+    - name: Copy minio webhook template to target node
+      template:
+        src: "config.json"
+        dest: "/tmp/config.json"
+
+    - name: Configure minio server
+      shell: "mc config host add minio http://{{ minio_ip }}:9000 {{ credentials.minio_access_key }} {{ credentials.minio_secret_key }}"
+
+    - name: Copy minio webhook template to /tmp/
+      shell: "mc admin config set minio < /tmp/config.json"
+
+    - name: Restart minio service
+      shell: "mc admin service restart minio"
+...

@@ -1,0 +1,75 @@
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+  my.nodes.MockComponent:
+    derived_from: tosca.nodes.SoftwareComponent
+    properties:
+      path:
+        type: string
+        description: Path on the host where this "component" resides
+    attributes:
+      id:
+        type: string
+        description: Unique ID of the "server"
+
+  my.nodes.MockServer:
+    derived_from: my.nodes.MockComponent
+    interfaces:
+      Standard:
+        type: tosca.interfaces.node.lifecycle.Standard
+        operations:
+          create:
+            inputs:
+              path: { default: { get_property: [SELF, path] }, type: string }
+            implementation: playbooks/mock-server/create.yaml
+    capabilities:
+      server:
+        type: tosca.capabilities.Node
+        valid_source_types: [my.nodes.MockComponent]
+
+  my.nodes.MockClient:
+    derived_from: my.nodes.MockComponent
+    interfaces:
+      Standard:
+        type: tosca.interfaces.node.lifecycle.Standard
+        inputs:
+          path: { default: { get_property: [SELF, path] }, type: string }
+        operations:
+          create:
+            implementation: playbooks/mock-client/create.yaml
+          configure:
+            inputs:
+              server_id: { default: { get_attribute: [ SELF, server, id ] }, type: string }
+            implementation: playbooks/mock-client/configure.yaml
+    requirements:
+      - server:
+          capability: tosca.capabilities.Node
+          relationship: my.relationships.MockServerClient
+
+relationship_types:
+  my.relationships.MockServerClient:
+    derived_from: tosca.relationships.DependsOn
+    valid_target_types: [ tosca.capabilities.Node ]
+
+topology_template:
+  node_templates:
+    my-workstation:
+      type: tosca.nodes.Compute
+      attributes:
+        private_address: localhost
+        public_address: localhost
+
+    my-mock-server:
+      type: my.nodes.MockServer
+      properties:
+        path: /tmp/playing-opera/02/server
+      requirements:
+        - host: my-workstation
+
+    my-mock-client:
+      type: my.nodes.MockClient
+      properties:
+        path: /tmp/playing-opera/02/client
+      requirements:
+        - host: my-workstation
+        - server: my-mock-server

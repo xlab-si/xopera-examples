@@ -1,0 +1,12 @@
+---
+host_ip: <your-host-ip>
+credentials: "{{ lookup('file','/tmp/credentials.json') }}"
+linux_distro: <linux-distribution>
+linux_release: <linux-release>
+
+### Example:
+# host_ip: localhost
+# credentials: "{{ lookup('file','/tmp/credentials.json') }}"
+# linux_distro: ubuntu
+# linux_release: bionic
+...
