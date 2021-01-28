@@ -76,13 +76,15 @@ validate_example "misc/server-client" "service.yaml" ""
 # test an example from csars/small
 validate_example "csars/small" "service.yaml" "inputs.json"
 # test a compressed CSAR example from csars/small
-cd csars/small || true
-mkdir -p compressed
-cp inputs.json compressed/inputs.json
-zip -qFSr compressed/small.csar service.yaml playbooks files
-cd ../..
-validate_example "csars/small/compressed" "small.csar" "inputs.json"
-rm -rf csars/small/compressed
+# uncomment the next section when new opera version 0.6.5 will be released
+# the current opera 0.6.4 version has a bug and works only with CSARs that have TOSCA.meta file
+# cd csars/small || true
+# mkdir -p compressed
+# cp inputs.json compressed/inputs.json
+# zip -qFSr compressed/small.csar service.yaml playbooks files
+# cd ../..
+# validate_example "csars/small/compressed" "small.csar" "inputs.json"
+# rm -rf csars/small/compressed
 # test an example from csars/misc-tosca-types
 validate_example "csars/misc-tosca-types" "service.yaml" "inputs.yaml"
 # test a compressed CSAR example from csars/misc-tosca-types
