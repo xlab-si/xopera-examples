@@ -68,12 +68,31 @@ validate_example "misc/compare-templates" "service1.yaml" "inputs1.yaml"
 validate_example "misc/concurrency" "service.yaml" ""
 # test an example from misc/hello-world
 validate_example "misc/hello-world" "service.yaml" ""
-# test an example from misc/misc-tosca-types
-validate_example "misc/misc-tosca-types" "service.yaml" "inputs.yaml"
 # test an example from misc/nginx-openstack
 validate_example "misc/nginx-openstack" "service.yaml" ""
 # test an example from misc/server-client
 validate_example "misc/server-client" "service.yaml" ""
+
+# test an example from csars/small
+validate_example "csars/small" "service.yaml" "inputs.json"
+# test a compressed CSAR example from csars/small
+cd csars/small || true
+mkdir -p compressed
+cp inputs.json compressed/inputs.json
+zip -qFSr compressed/small.csar service.yaml playbooks files
+cd ../..
+validate_example "csars/small/compressed" "small.csar" "inputs.json"
+rm -rf csars/small/compressed
+# test an example from csars/misc-tosca-types
+validate_example "csars/misc-tosca-types" "service.yaml" "inputs.yaml"
+# test a compressed CSAR example from csars/misc-tosca-types
+cd csars/misc-tosca-types || true
+mkdir -p compressed
+cp inputs.yaml compressed/inputs.yaml
+zip -qFSr compressed/misc-tosca-types.csar service.yaml modules TOSCA-Metadata
+cd ../..
+validate_example "csars/misc-tosca-types/compressed" "misc-tosca-types.csar" "inputs.yaml"
+rm -rf csars/misc-tosca-types/compressed
 
 # test an example from cloud/aws/thumbnail-generator
 validate_example "cloud/aws/thumbnail-generator" "service.yaml" "inputs.yaml"
@@ -85,7 +104,6 @@ validate_example "cloud/gcp/thumbnail-generator" "service.yaml" "inputs.yaml"
 # test an example from cloud/openfaas/thumbnail-generator
 validate_example "cloud/openfaas/thumbnail-generator/openfaas-setup" "service.yaml" "inputs.yaml"
 validate_example "cloud/openfaas/thumbnail-generator/image-resize" "service.yaml" "inputs.yaml"
-
 # test an example from cloud/platform-connection/aws-azure-connection
 validate_example "cloud/platform-connection/aws-azure-connection/aws-azure" "service.yaml" "inputs.yaml"
 validate_example "cloud/platform-connection/aws-azure-connection/azure-aws" "service.yaml" "inputs.yaml"
