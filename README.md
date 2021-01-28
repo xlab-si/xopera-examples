@@ -2,7 +2,7 @@
 Deployable TOSCA YAML v1.3 templates for [xOpera orchestration tool](https://github.com/xlab-si/xopera-opera).
 
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/xlab-si/xopera-examples/Validate%20examples%20with%20xOpera%20orchestrator?label=validation)](https://github.com/xlab-si/xopera-examples/actions?query=workflow%3A%22Validate+examples+with+xOpera+orchestrator%22)
-[![GitHub contributors](https://img.shields.io/github/contributors/xlab-si/xopera-examples)](https://github.com/xlab-si/xopera-opera/graphs/contributors)
+[![GitHub contributors](https://img.shields.io/github/contributors/xlab-si/xopera-examples)](https://github.com/xlab-si/xopera-examples/graphs/contributors)
 
 ## Table of Contents
   - [Introduction](#introduction)
