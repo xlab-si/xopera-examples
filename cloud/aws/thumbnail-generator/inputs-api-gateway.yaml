@@ -1,5 +1,5 @@
 ---
-# This yaml file contains inputs for service_api_gateway.yaml.
+# This yaml file contains inputs for service-api-gateway.yaml.
 
 host_ip: <host-ip>
 aws_region: <aws-region>

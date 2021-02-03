@@ -13,7 +13,6 @@ available workers (execution threads) which results in faster deployment.
 We can run this example as follows:
 
 ```console
-(venv) $ cd misc/concurrency
 (venv) misc/concurrency$ opera deploy -w 10 service.yaml
 [Worker_0]   Deployment of my-workstation_0 complete
 [Worker_0]   Deploying hello-1_0
