@@ -1,0 +1,28 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+  radon.nodes.docker:
+    derived_from: tosca.nodes.SoftwareComponent
+    properties:
+      linux_distro:
+        type: string
+        description: Name of linux distro
+      linux_release:
+        type: string
+        description: Name of linux release
+    attributes:
+      linux_distro:
+        type: string
+      linux_release:
+        type: string
+    interfaces:
+      Standard:
+        type: tosca.interfaces.node.lifecycle.Standard
+        inputs:
+          linux_distro: { default: { get_property: [SELF, linux_distro] }, type: string }
+          linux_release: { default: { get_property: [SELF, linux_release] }, type: string }
+        operations:
+          create: playbooks/create.yaml
+          delete: playbooks/delete.yaml
+...

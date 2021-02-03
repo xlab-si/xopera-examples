@@ -1,0 +1,53 @@
+---
+- hosts: all
+  tasks:
+    - name: Fail task when Ansible OS family is not 'Debian'
+      failed_when: ansible_os_family != 'Debian'
+
+    - name: Install prerequsiste packages
+      package:
+        name:
+          - python3-pip
+          - python3-setuptools
+          - python3-venv
+        state: present
+
+    - name: Install prerequsiste Python packages
+      pip:
+        name:
+          - pip==21.0.1
+          - docker==4.4.1
+        state: latest
+        executable: pip3
+
+    - name: Add the Docker repo key Debian
+      apt_key:
+        id: "0EBFCD88"
+        url: "https://download.docker.com/linux/debian/gpg"
+        state: present
+
+    - name: Add the Docker repositories
+      apt_repository:
+        repo: "{{ item.src }}"
+        state: present
+        filename: "{{ item.name }}"
+        update_cache: true
+      with_items:
+        - name: docker-ce
+          src: "deb [arch=amd64] https://download.docker.com/linux/{{ linux_distro }} {{ linux_release }} stable"
+
+    - name: Install Docker packages
+      package:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+      register: docker_package
+
+    - name: Ensure the Docker group exists
+      group:
+        name: docker
+        state: present
+...

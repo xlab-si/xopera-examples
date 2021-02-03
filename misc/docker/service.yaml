@@ -1,0 +1,44 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+  - lib/docker/docker.yaml
+  - lib/minio/minio.yaml
+
+topology_template:
+  inputs:
+    host_ip:
+      type: string
+    linux_distro:
+      type: string
+    linux_release:
+      type: string
+    minio_credentials:
+      type: map
+      entry_schema:
+        description: MinIO access and secret key
+        type: string
+
+  node_templates:
+    my-workstation:
+      type: tosca.nodes.Compute
+      attributes:
+        private_address: { get_input: host_ip }
+        public_address: { get_input: host_ip }
+
+    docker:
+      type: radon.nodes.docker
+      properties:
+        linux_distro: { get_input: linux_distro }
+        linux_release: { get_input: linux_release }
+      requirements:
+        - host: my-workstation
+
+    minio:
+      type: radon.nodes.minio
+      properties:
+        minio_ip: { get_input: host_ip }
+        minio_credentials: { get_input: minio_credentials }
+      requirements:
+        - host: my-workstation
+...

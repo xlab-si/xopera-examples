@@ -1,0 +1,29 @@
+---
+- hosts: all
+  tasks:
+    - name: Remove any existing MinIO configurations
+      file:
+        state: absent
+        path: "/tmp/config.json"
+
+    - name: Remove MinIO client
+      file:
+        state: absent
+        path: "/usr/bin/mc"
+
+    - name: Stop and remove MinIO docker container
+      docker_container:
+        name: minio
+        state: absent
+
+    - name: Uninstall prerequsiste python3 packages
+      pip:
+        name:
+          - docker==4.0.2
+          - botocore==1.15.27
+          - boto==2.49.0
+          - boto3==1.12.27
+          - minio==5.0.10
+        state: absent
+        executable: pip3
+...

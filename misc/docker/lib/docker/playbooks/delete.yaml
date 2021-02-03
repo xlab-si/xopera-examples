@@ -1,0 +1,34 @@
+---
+- hosts: all
+  tasks:
+    - name: Uninstall Docker packages
+      package:
+        name: "{{ item }}"
+        state: absent
+      with_items:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+      register: docker_package
+
+    - name: Recursively remove docker directory
+      file:
+        path: /var/lib/docker
+        state: absent
+
+    - name: Uninstall prerequsiste packages
+      package:
+        name:
+          - python3-pip
+          - python3-setuptools
+          - python3-venv
+        state: absent
+
+    - name: Uninstall prerequsiste Python packages
+      pip:
+        name:
+          - pip==21.0.1
+          - docker==4.4.1
+        state: absent
+        executable: pip3
+...

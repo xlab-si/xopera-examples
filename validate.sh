@@ -72,6 +72,8 @@ validate_example "misc/hello-world" "service.yaml" ""
 validate_example "misc/nginx-openstack" "service.yaml" ""
 # test an example from misc/server-client
 validate_example "misc/server-client" "service.yaml" ""
+# test an example from misc/docker
+validate_example "misc/docker" "service.yaml" "inputs.yaml"
 
 # test an example from csars/small
 validate_example "csars/small" "service.yaml" "inputs.json"
