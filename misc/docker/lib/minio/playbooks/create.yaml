@@ -1,0 +1,66 @@
+---
+- hosts: all
+  tasks:
+    - name: Install prerequsiste python3 packages
+      pip:
+        name:
+          - docker==4.0.2
+          - botocore==1.15.27
+          - boto==2.49.0
+          - boto3==1.12.27
+          - minio==5.0.10
+        state: latest
+        executable: pip3
+
+    - name: Run MinIO object storage in docker container
+      docker_container:
+        name: minio
+        image: minio/minio:RELEASE.2019-12-24T23-04-45Z
+        command: "server /data"
+        pull: true
+        published_ports:
+          - 9000:9000
+        state: started
+        env:
+          MINIO_ACCESS_KEY: "{{ minio_credentials.access_key }}"
+          MINIO_SECRET_KEY: "{{ minio_credentials.secret_key }}"
+
+    - name: Install MinIO client (mc)
+      get_url:
+        url: https://dl.min.io/client/mc/release/linux-amd64/archive/mc.RELEASE.2019-12-24T23-41-36Z
+        dest: /root
+        mode: 'u=rwx,g=rx,o=rx'
+
+    - name: Rename the minio client binary
+      shell: "mv mc.RELEASE.2019-12-24T23-41-36Z mc"
+
+    - name: Move mc program to /usr/bin/
+      shell: "mv mc /usr/bin/"
+
+    - name: Remove any existing MinIO configurations
+      file:
+        state: absent
+        path: "/tmp/config.json"
+
+    - name: Copy MinIO webhook template to target node
+      template:
+        src: "config.json"
+        dest: "/tmp/config.json"
+
+    - name: Configure MinIO server
+      shell: "mc config host add minio http://{{ minio_ip }}:9000 {{ minio_credentials.access_key }} {{ minio_credentials.secret_key }}"
+
+    - name: Copy MinIO webhook template to /tmp/
+      shell: "mc admin config set minio < /tmp/config.json"
+
+    - name: Restart MinIO service
+      shell: "mc admin service restart minio"
+
+    - name: Create MinIO bucket names 'files'
+      s3_bucket:
+        name: files
+        state: present
+        aws_access_key: "{{ minio_credentials.access_key }}"
+        aws_secret_key: "{{ minio_credentials.secret_key }}"
+        s3_url: "http://{{ minio_ip }}:9000"
+...

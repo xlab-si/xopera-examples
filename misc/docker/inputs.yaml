@@ -1,0 +1,8 @@
+---
+# This yaml file contains inputs for service.yaml.
+
+host_ip: localhost
+linux_distro: ubuntu
+linux_release: bionic
+minio_credentials: { access_key: minio_access_key, secret_key: minio_secret_key }
+...
