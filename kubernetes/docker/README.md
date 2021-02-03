@@ -8,7 +8,9 @@ Install Docker and run a Docker container on a target machine.
 ## Description
 The main functionality of this solution is to install Docker service on a target machine and deploy a MinIO Docker 
 container on a target machine. [MinIO](https://min.io/) is a high performance, Kubernetes-native object storage suite.
-Here MinIO object storage is fully set up and prepared for storing files in the created bucket.
+Here MinIO object storage is fully set up and prepared for storing files in the created bucket. After the deployment
+you will be able to access MinIO dashboard on `localhost:9000` where you can login wit the credentials you specified 
+in `inputs.yaml`.
 
 There are 2 main Ansible playbooks separated into folders. Usage is explained in the table below:
 
@@ -35,8 +37,8 @@ You can also skip `OPERA_SSH_USER` when running xOpera by exporting this variabl
 You can invoke deployment and xOpera orchestration with the command below. 
 
 ```console
-(venv) $ cd misc/docker
-(venv) misc/docker$ opera deploy -i inputs.yaml service.yaml
+(venv) $ cd kubernetes/docker
+(venv) kubernetes/docker$ opera deploy -i inputs.yaml service.yaml
 [Worker_0]   Deploying my-workstation_0
 [Worker_0]   Deployment of my-workstation_0 complete
 [Worker_0]   Deploying docker_0
@@ -50,7 +52,7 @@ You can invoke deployment and xOpera orchestration with the command below.
 You can undeploy the solution with:
 
 ```console
-(venv) misc/docker$ opera undeploy
+(venv) kubernetes/docker$ opera undeploy
 [Worker_0]   Undeploying docker_0
 [Worker_0]   Undeployment of docker_0 complete
 [Worker_0]     Executing delete on docker_0
@@ -58,5 +60,4 @@ You can undeploy the solution with:
 [Worker_0]   Undeployment of minio_0 complete
 [Worker_0]     Executing delete on minio_0
 [Worker_0]   Undeploying my-workstation_0
-[Worker_0]   Undeployment of my-workstation_0 complete
 ```

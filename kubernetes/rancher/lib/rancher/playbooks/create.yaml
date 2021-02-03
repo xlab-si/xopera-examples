@@ -1,0 +1,15 @@
+---
+- hosts: all
+  tasks:
+    - name: Run Kubernetes in a Rancher Docker container
+      docker_container:
+        name: rancher
+        image: rancher/rancher:v2.5-head
+        pull: true
+        published_ports:
+          - 80:80
+          - 443:443
+        state: started
+        restart_policy: unless-stopped
+        privileged: true
+...
