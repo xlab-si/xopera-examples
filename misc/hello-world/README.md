@@ -43,7 +43,6 @@ total 0
 The solution can be also undeployed:
 
 ```console
-(venv) $ cd misc/hello-world
 (venv) misc/hello-world$ opera undeploy
 [Worker_0]   Undeploying hello_0
 [Worker_0]     Executing delete on hello_0
