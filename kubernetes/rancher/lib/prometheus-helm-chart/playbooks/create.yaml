@@ -1,0 +1,13 @@
+---
+- hosts: all
+  tasks:
+    - name: Enter into a running Rancher container and install and deploy Prometheus helm chart (retry on failure)
+      shell: docker exec rancher /bin/bash -c "/usr/bin/helm_v3 repo add prometheus-community https://prometheus-community.github.io/helm-charts &&
+                                               /usr/bin/helm_v3 repo add kube-state-metrics https://kubernetes.github.io/kube-state-metrics &&
+                                               /usr/bin/helm_v3 repo update &&
+                                               /usr/bin/helm_v3 install my-prometheus prometheus-community/prometheus --version 13.3.2"
+      retries: 3
+      delay: 3
+      register: result
+      until: result.rc == 0
+...

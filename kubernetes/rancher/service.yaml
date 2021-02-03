@@ -1,0 +1,30 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+  - lib/rancher/rancher.yaml
+  - lib/prometheus-helm-chart/prometheus-helm-chart.yaml
+
+topology_template:
+  inputs:
+    host_ip:
+      type: string
+
+  node_templates:
+    my-workstation:
+      type: tosca.nodes.Compute
+      attributes:
+        private_address: { get_input: host_ip }
+        public_address: { get_input: host_ip }
+
+    rancher:
+      type: radon.nodes.k8s.rancher
+      requirements:
+        - host: my-workstation
+
+    prometheus-helm-chart:
+      type: radon.nodes.k8s.prometheus_helm_chart
+      requirements:
+        - host: my-workstation
+        - rancher: rancher
+...

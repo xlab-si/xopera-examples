@@ -1,0 +1,20 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+  radon.nodes.k8s.prometheus_helm_chart:
+    derived_from: tosca.nodes.SoftwareComponent
+    interfaces:
+      Standard:
+        type: tosca.interfaces.node.lifecycle.Standard
+        operations:
+          create: playbooks/create.yaml
+          delete: playbooks/delete.yaml
+    requirements:
+      - host:
+          capability: tosca.capabilities.Compute
+          relationship: tosca.relationships.HostedOn
+      - rancher:
+          capability: tosca.capabilities.Compute
+          relationship: tosca.relationships.DependsOn
+...

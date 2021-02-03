@@ -1,0 +1,10 @@
+---
+- hosts: all
+  tasks:
+    - name: Uninstall Prometheus helm chart (retry on failure)
+      shell: docker exec rancher /bin/bash -c "/usr/bin/helm_v3 uninstall my-prometheus"
+      retries: 3
+      delay: 3
+      register: result
+      until: result.rc == 0
+...

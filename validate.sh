@@ -72,8 +72,6 @@ validate_example "misc/hello-world" "service.yaml" ""
 validate_example "misc/nginx-openstack" "service.yaml" ""
 # test an example from misc/server-client
 validate_example "misc/server-client" "service.yaml" ""
-# test an example from misc/docker
-validate_example "misc/docker" "service.yaml" "inputs.yaml"
 
 # test an example from csars/small
 validate_example "csars/small" "service.yaml" "inputs.json"
@@ -111,6 +109,11 @@ validate_example "cloud/openfaas/thumbnail-generator/image-resize" "service.yaml
 # test an example from cloud/platform-connection/aws-azure-connection
 validate_example "cloud/platform-connection/aws-azure-connection/aws-azure" "service.yaml" "inputs.yaml"
 validate_example "cloud/platform-connection/aws-azure-connection/azure-aws" "service.yaml" "inputs.yaml"
+
+# test an example from kubernetes/docker
+validate_example "kubernetes/docker" "service.yaml" "inputs.yaml"
+# test an example from kubernetes/rancher
+validate_example "kubernetes/rancher" "service.yaml" "inputs.yaml"
 
 # finish testing
 printf "\nTesting finished: %d tests runned, %d successful, %d failures\n" "$tests_run" "$successful" "$failed"
