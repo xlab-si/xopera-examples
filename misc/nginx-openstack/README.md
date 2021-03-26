@@ -36,4 +36,3 @@ We can run this example as follows:
 (venv) $ cd misc/nginx-openstack
 (venv) misc/nginx-openstack$ opera deploy service.yaml
 ```
-
