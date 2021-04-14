@@ -1,0 +1,43 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+  radon.nodes.aws.ec2_role:
+    derived_from: tosca.nodes.SoftwareComponent
+    properties:
+      region:
+        type: string
+        description: AWS region
+      role_name:
+        type: string
+        description: Name of the AWS role
+    attributes:
+      role_arn:
+        type: string
+        description: AWS role arn identifier
+    interfaces:
+      Standard:
+        type: tosca.interfaces.node.lifecycle.Standard
+        inputs:
+          region: { default: { get_property: [ SELF, region ] }, type: string }
+          role_name: { default: { get_property: [ SELF, role_name ] }, type: string }
+        operations:
+          create:
+            implementation:
+              primary: playbooks/create.yaml
+              dependencies:
+                - playbooks/policy.json
+          delete:
+            implementation:
+              primary: playbooks/delete.yaml
+              dependencies:
+                - playbooks/policy.json
+    capabilities:
+      requires_role:
+        type: tosca.capabilities.Compute
+        valid_source_types: [ radon.nodes.aws.ec2_vm ]
+    requirements:
+      - requires_prerequisites:
+          capability: tosca.capabilities.Node
+          relationship: tosca.relationships.DependsOn
+...

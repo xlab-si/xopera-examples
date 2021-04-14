@@ -99,6 +99,8 @@ rm -rf csars/misc-tosca-types/compressed
 # test an example from cloud/aws/thumbnail-generator
 validate_example "cloud/aws/thumbnail-generator" "service.yaml" "inputs.yaml"
 validate_example "cloud/aws/thumbnail-generator" "service-api-gateway.yaml" "inputs-api-gateway.yaml"
+# test an example from cloud/aws/thumbnail-generator-with-vm
+validate_example "cloud/aws/thumbnail-generator-with-vm" "service.yaml" "inputs.yaml"
 # test an example from cloud/azure/thumbnail-generator
 validate_example "cloud/azure/thumbnail-generator" "service.yaml" "inputs.yaml"
 # test an example from cloud/gcp/thumbnail-generator

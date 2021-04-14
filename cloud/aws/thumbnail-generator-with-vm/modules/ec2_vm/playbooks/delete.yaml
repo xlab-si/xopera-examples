@@ -1,0 +1,17 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Terminate EC2 instance
+      amazon.aws.ec2:
+        state: absent
+        region: "{{ region }}"
+        instance_id: "{{ instance_id }}"
+        wait: yes
+
+    - name: Delete security group by its id
+      amazon.aws.ec2_group:
+        region: "{{ region }}"
+        group_id: "{{ group_id }}"
+        state: absent
+...

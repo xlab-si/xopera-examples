@@ -1,0 +1,46 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+  radon.nodes.aws.ec2_web_app:
+    derived_from: tosca.nodes.SoftwareComponent
+    properties:
+      ssh_key_file:
+        type: string
+        default: { get_attribute: [ SELF, requires_keypair, ssh_key_file ] }
+      ssh_user:
+        type: string
+      region:
+        type: string
+      bucket_name:
+        type: string
+    interfaces:
+      Standard:
+        type: tosca.interfaces.node.lifecycle.Standard
+        operations:
+          create:
+            inputs:
+              ssh_key_file:
+                type: string
+                default: { get_property: [ SELF, ssh_key_file ] }
+              ssh_user:
+                type: string
+                default: { get_property: [ SELF, ssh_user ] }
+              region:
+                type: string
+                default: { get_property: [ SELF, region ] }
+              bucket_name:
+                type: string
+                default: { get_property: [ SELF, bucket_name ] }
+            implementation:
+              primary: playbooks/create.yaml
+              dependencies:
+                - web_app
+    requirements:
+      - requires_prerequisites:
+          capability: tosca.capabilities.Node
+          relationship: tosca.relationships.DependsOn
+      - requires_keypair:
+          capability: tosca.capabilities.Node
+          relationship: tosca.relationships.DependsOn
+...

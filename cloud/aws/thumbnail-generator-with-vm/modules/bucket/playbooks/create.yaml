@@ -1,0 +1,14 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: "Create AWS S3 bucket {{ bucket_name }}"
+      s3_bucket:
+        name: "{{ bucket_name }}"
+        state: present
+        region: "{{ region }}"
+
+    - name: Set attributes
+      set_stats:
+        data: { bucket_name: "{{ bucket_name }}" }
+...

@@ -1,0 +1,195 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+  - modules/prerequisites/prerequisites.yaml
+  - modules/lambda_role/lambda_role.yaml
+  - modules/lambda/lambda.yaml
+  - modules/bucket/bucket.yaml
+  - modules/bucket_notification/bucket_notification.yaml
+  - modules/ec2_keypair/ec2_keypair.yaml
+  - modules/vpc_subnet/vpc_subnet.yaml
+  - modules/ec2_role/ec2_role.yaml
+  - modules/ec2_vm/ec2_vm.yaml
+  - modules/ec2_docker/ec2_docker.yaml
+  - modules/ec2_web_app/ec2_web_app.yaml
+
+metadata:
+  template_name: "thumbnail-generator-with-vm"
+  template_author: "XLAB"
+  template_version: "1.0"
+
+topology_template:
+  inputs:
+    host_ip:
+      type: string
+    region:
+      type: string
+    lambda_role_name:
+      type: string
+    function_name:
+      type: string
+    function_alias:
+      type: string
+    permission_id:
+      type: string
+    bucket_in_name:
+      type: string
+    bucket_out_name:
+      type: string
+    lambda_runtime:
+      type: string
+    lambda_handler:
+      type: string
+    lambda_timeout:
+      type: string
+    lambda_memory:
+      type: string
+    ec2_role_name:
+      type: string
+    ssh_key_file_path:
+      type: string
+    ssh_key_name:
+      type: string
+    ssh_user:
+      type: string
+    security_group:
+      type: string
+    instance_type:
+      type: string
+    image:
+      type: string
+
+  node_templates:
+    my-workstation:
+      type: tosca.nodes.Compute
+      attributes:
+        private_address: { get_input: host_ip }
+        public_address: { get_input: host_ip }
+
+    prerequisites:
+      type: radon.nodes.aws.prerequisites
+      requirements:
+        - host: my-workstation
+
+    lambda_role:
+      type: radon.nodes.aws.lambda_role
+      properties:
+        region: { get_input: region }
+        role_name: { get_input: lambda_role_name }
+      requirements:
+        - host: my-workstation
+        - requires_prerequisites: prerequisites
+
+    lambda:
+      type: radon.nodes.aws.lambda
+      properties:
+        region: { get_input: region }
+        function_name: { get_input: function_name }
+        function_alias: { get_input: function_alias }
+        permission_id: { get_input: permission_id }
+        lambda_runtime: { get_input: lambda_runtime }
+        lambda_handler: { get_input: lambda_handler }
+        lambda_timeout: { get_input: lambda_timeout }
+        lambda_memory: { get_input: lambda_memory }
+        bucket_out_name: { get_input: bucket_out_name }
+      requirements:
+        - host: my-workstation
+        - requires_prerequisites: prerequisites
+        - requires_role: lambda_role
+
+    bucket_in:
+      type: radon.nodes.aws.bucket
+      properties:
+        bucket_name: { get_input: bucket_in_name }
+        region: { get_input: region }
+      requirements:
+        - host: my-workstation
+        - requires_prerequisites: prerequisites
+
+    bucket_out:
+      type: radon.nodes.aws.bucket
+      properties:
+        bucket_name: { get_input: bucket_out_name }
+        region: { get_input: region }
+      requirements:
+        - host: my-workstation
+
+    bucket_notification:
+      type: radon.nodes.aws.bucket_notification
+      properties:
+        region: { get_input: region }
+      requirements:
+        - host: my-workstation
+        - requires_prerequisites: prerequisites
+        - receives_notification: lambda
+        - bucket: bucket_in
+
+    vpc_subnet:
+      type: radon.nodes.aws.vpc_subnet
+      properties:
+        region: { get_input: region }
+      requirements:
+        - host: my-workstation
+        - requires_prerequisites: prerequisites
+
+    ec2_role:
+      type: radon.nodes.aws.ec2_role
+      properties:
+        region: { get_input: region }
+        role_name: { get_input: ec2_role_name }
+      requirements:
+        - host: my-workstation
+        - requires_prerequisites: prerequisites
+
+    ec2_keypair:
+      type: radon.nodes.aws.ec2_keypair
+      properties:
+        ssh_key_name: { get_input: ssh_key_name }
+        ssh_key_file_path: { get_input: ssh_key_file_path }
+        region: { get_input: region }
+      requirements:
+        - host: my-workstation
+        - requires_prerequisites: prerequisites
+
+    ec2_vm:
+      type: radon.nodes.aws.ec2_vm
+      properties:
+        security_group: { get_input: security_group }
+        ssh_user: { get_input: ssh_user }
+        image: { get_input: image }
+        ssh_key_name: { get_input: ssh_key_name }
+        instance_type: { get_input: instance_type }
+        region: { get_input: region }
+      requirements:
+        - host: my-workstation
+        - requires_prerequisites: prerequisites
+        - requires_role: ec2_role
+        - requires_vpc: vpc_subnet
+        - requires_keypair: ec2_keypair
+
+    ec2_docker:
+      type: radon.nodes.aws.ec2_docker
+      properties:
+        ssh_user: { get_input: ssh_user }
+      requirements:
+        - host: ec2_vm
+        - requires_prerequisites: prerequisites
+        - requires_keypair: ec2_keypair
+
+    ec2_web_app:
+      type: radon.nodes.aws.ec2_web_app
+      properties:
+        ssh_user: { get_input: ssh_user }
+        region: { get_input: region }
+        bucket_name: { get_input: bucket_out_name }
+      requirements:
+        - host: ec2_vm
+        - requires_prerequisites: prerequisites
+        - requires_keypair: ec2_keypair
+
+  outputs:
+    ec2_web_page_address:
+      description: Web page address
+      value: { concat: [ 'http://', get_attribute: [ ec2_vm, public_address ] ] }
+...
