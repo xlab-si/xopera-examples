@@ -12,11 +12,20 @@
 
     - name: "Create a new EC2 AWS role: {{ role_name }}"
       iam_role:
-        state: present
         name: "{{ role_name }}"
         region: "{{ region }}"
         description: "EC2 role"
-        assume_role_policy_document: "{{ lookup('file','policy.json') }}"
+        assume_role_policy_document: |
+          {
+              "Version": "2012-10-17",
+              "Statement": {
+                  "Effect": "Allow",
+                  "Principal": {
+                      "Service": "ec2.amazonaws.com"
+                  },
+                  "Action": "sts:AssumeRole"
+              }
+          }
         managed_policy:
           - arn:aws:iam::aws:policy/AmazonS3FullAccess
       register: iam_role_response

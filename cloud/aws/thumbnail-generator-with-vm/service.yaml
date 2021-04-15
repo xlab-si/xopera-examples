@@ -114,6 +114,7 @@ topology_template:
         region: { get_input: region }
       requirements:
         - host: my-workstation
+        - requires_prerequisites: prerequisites
 
     bucket_notification:
       type: radon.nodes.aws.bucket_notification

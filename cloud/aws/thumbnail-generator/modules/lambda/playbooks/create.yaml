@@ -3,7 +3,10 @@
   gather_facts: no
   tasks:
     - name: Install prerequsiste packages
-      command: "pip install -r 'function/requirements.txt' -t 'function/'"
+      pip:
+        chdir: "function"
+        requirements: "requirements.txt"
+        extra_args: "-t ."
 
     - name: Compress function an requirements into zip file
       archive:
@@ -16,7 +19,7 @@
         name: "{{ function_name }}"
         zip_file: "function.zip"
         runtime: "{{ lambda_runtime }}"
-        region: "{{ aws_region }}"
+        region: "{{ region }}"
         role: "{{ aws_role }}"
         handler: "{{ lambda_handler }}"
         timeout: "{{ lambda_timeout }}"
@@ -29,8 +32,7 @@
       lambda_alias:
         function_name: "{{ function_name }}"
         name: "{{ func_alias }}"
-        region: "{{ aws_region }}"
-        state: present
+        region: "{{ region }}"
       register: alias_info
 
     - name: "Add invocation permission of Lambda function on AWS : {{ permission_id }}"
@@ -38,7 +40,7 @@
         function_name: "{{ function_name }}"
         statement_id: "{{ permission_id }}"
         action: lambda:InvokeFunction
-        region: "{{ aws_region }}"
+        region: "{{ region }}"
         alias: "{{ func_alias }}"
         principal: "s3.amazonaws.com"
 

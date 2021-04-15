@@ -22,16 +22,8 @@ node_types:
           region: { default: { get_property: [ SELF, region ] }, type: string }
           role_name: { default: { get_property: [ SELF, role_name ] }, type: string }
         operations:
-          create:
-            implementation:
-              primary: playbooks/create.yaml
-              dependencies:
-                - playbooks/policy.json
-          delete:
-            implementation:
-              primary: playbooks/delete.yaml
-              dependencies:
-                - playbooks/policy.json
+          create: playbooks/create.yaml
+          delete: playbooks/delete.yaml
     capabilities:
       requires_role:
         type: tosca.capabilities.Compute

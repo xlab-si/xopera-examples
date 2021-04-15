@@ -2,21 +2,24 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
 
 imports:
-  - modules/aws_role/create_role.yaml
-  - modules/lambda/aws_lambda.yaml
-  - modules/bucket/s3_bucket.yaml
+  - modules/prerequisites/prerequisites.yaml
+  - modules/lambda_role/lambda_role.yaml
+  - modules/lambda/lambda.yaml
+  - modules/bucket/bucket.yaml
   - modules/bucket_notification/bucket_notification.yaml
-  - modules/api_gateway/api_gateway.yaml
+
+metadata:
+  template_name: "thumbnail-generator"
+  template_author: "XLAB"
+  template_version: "1.0"
 
 topology_template:
   inputs:
     host_ip:
       type: string
-    aws_region:
+    region:
       type: string
-    role_name:
-      type: string
-    role_description:
+    lambda_role_name:
       type: string
     function_name:
       type: string
@@ -44,19 +47,24 @@ topology_template:
         private_address: { get_input: host_ip }
         public_address: { get_input: host_ip }
 
-    aws_lambda_role:
-      type: radon.policies.createRole
-      properties:
-        aws_region: { get_input: aws_region }
-        role_name: { get_input: role_name }
-        role_description: { get_input: role_description }
+    prerequisites:
+      type: radon.nodes.aws.prerequisites
       requirements:
         - host: my-workstation
 
-    aws_lambda:
-      type: radon.nodes.function.aws_lambda
+    lambda_role:
+      type: radon.nodes.aws.lambda_role
       properties:
-        aws_region: { get_input: aws_region }
+        region: { get_input: region }
+        role_name: { get_input: lambda_role_name }
+      requirements:
+        - host: my-workstation
+        - requires_prerequisites: prerequisites
+
+    lambda:
+      type: radon.nodes.aws.lambda
+      properties:
+        region: { get_input: region }
         function_name: { get_input: function_name }
         function_alias: { get_input: function_alias }
         permission_id: { get_input: permission_id }
@@ -67,30 +75,34 @@ topology_template:
         bucket_out_name: { get_input: bucket_out_name }
       requirements:
         - host: my-workstation
-        - requires_role: aws_lambda_role
+        - requires_prerequisites: prerequisites
+        - requires_role: lambda_role
 
     bucket_in:
-      type: radon.nodes.s3_bucket
+      type: radon.nodes.aws.bucket
       properties:
         bucket_name: { get_input: bucket_in_name }
-        aws_region: { get_input: aws_region }
+        region: { get_input: region }
       requirements:
         - host: my-workstation
+        - requires_prerequisites: prerequisites
 
     bucket_out:
-      type: radon.nodes.s3_bucket
+      type: radon.nodes.aws.bucket
       properties:
         bucket_name: { get_input: bucket_out_name }
-        aws_region: { get_input: aws_region }
+        region: { get_input: region }
       requirements:
         - host: my-workstation
+        - requires_prerequisites: prerequisites
 
     bucket_notification:
-      type: radon.nodes.triggers.bucket_notification
+      type: radon.nodes.aws.bucket_notification
       properties:
-        aws_region: { get_input: aws_region }
+        region: { get_input: region }
       requirements:
         - host: my-workstation
-        - receives_notification: aws_lambda
+        - requires_prerequisites: prerequisites
+        - receives_notification: lambda
         - bucket: bucket_in
 ...

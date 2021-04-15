@@ -2,13 +2,13 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
 
 node_types:
-  radon.nodes.s3_bucket:
+  radon.nodes.aws.bucket:
     derived_from: tosca.nodes.SoftwareComponent
     properties:
       bucket_name:
         type: string
         description: The name of the bucket
-      aws_region:
+      region:
         type: string
         description: AWS region
     attributes:
@@ -18,9 +18,13 @@ node_types:
       Standard:
         type: tosca.interfaces.node.lifecycle.Standard
         inputs:
-          bucket_name: {default: { get_property: [SELF, bucket_name] }, type: string }
-          aws_region: {default: { get_property: [SELF, aws_region] }, type: string }
+          bucket_name: { default: { get_property: [ SELF, bucket_name ] }, type: string }
+          region: { default: { get_property: [ SELF, region ] }, type: string }
         operations:
           create: playbooks/create.yaml
           delete: playbooks/delete.yaml
+    requirements:
+      - requires_prerequisites:
+          capability: tosca.capabilities.Node
+          relationship: tosca.relationships.DependsOn
 ...

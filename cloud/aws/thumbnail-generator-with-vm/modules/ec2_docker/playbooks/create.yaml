@@ -12,7 +12,6 @@
       package:
         name:
           - python3
-        state: present
       become: true
       become_method: sudo
 

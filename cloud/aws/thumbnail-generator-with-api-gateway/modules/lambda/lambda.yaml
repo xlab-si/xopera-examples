@@ -60,7 +60,7 @@ node_types:
     capabilities:
       receives_notification:
         type: tosca.capabilities.Compute
-        valid_source_types: [ radon.nodes.aws.bucket_notification ]
+        valid_source_types: [ radon.nodes.aws.api_gateway ]
     requirements:
       - requires_prerequisites:
           capability: tosca.capabilities.Node

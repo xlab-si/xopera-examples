@@ -22,7 +22,6 @@
         build:
           path: "/home/{{ ssh_user }}/web_app"
         source: build
-        state: present
       become: true
       become_method: sudo
 

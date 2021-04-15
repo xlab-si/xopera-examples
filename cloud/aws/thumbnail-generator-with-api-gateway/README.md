@@ -1,5 +1,5 @@
-# AWS thumbnail generator
-Image resize functionality deployment with xOpera for Amazon Web Services.
+# AWS thumbnail generator with API Gateway
+Image resize functionality deployment with xOpera for Amazon Web Services (using AWS API Gateway).
 
 ## Table of Contents
   - [Description](#description)
@@ -18,7 +18,7 @@ The solution includes next deployment modules separated into folders:
 | **lambda_role** | Creates a new AWS IAM role for AWS Lambda |
 | **bucket** | Creates a new AWS S3 bucket |
 | **lambda** | Prepares a zipfile with function and deploys it to AWS Lambda |
-| **bucket-notification** | Creates notification on bucket for triggering the lambda |
+| **api-gateway** | Sets up API Gateway that can trigger AWS Lambda |
 
 You can modify values in `inputs.yaml` to set the appropriate params(IPs, auth params, container names etc.).
 
@@ -47,28 +47,35 @@ aws configure
 ```
 
 ## Running with xOpera
-You can modify values in `inputs.yaml` to set the appropriate params(IPs, auth params, container names etc.).
+If you want to test the solution with AWS API Gateway you should modify values in `inputs.yaml`. The following values 
+can be modified:
 
 | Input | Description | Example |
 |:-------------|:-------------|:-------------|
 | `host_ip` | Host IP address | localhost |
 | `region` | AWS region for your resources | eu-central-1 |
-| `lambda_role_name` | The name of the new AWS role | LambdaRole |
+| `lambda_role_name` | The name of the new AWS role | RadonLambda |
 | `function_name` | The name of the new AWS Lambda function | image-resize-function |
 | `function_alias` | New alias for the function | latest |
-| `permission_id` | Id of the permission - a unique statement identifier for lambda policy | lambda_test_permission |
-| `bucket_in_name` | Name of the incoming bucket for original images | original |
-| `bucket_out_name` | The name of the bucket containing resized images | resized |
-| `lambda_runtime` | Runtime of the deployed lambda | python3.8 |
+| `permission_id` | Id of the permission - a unique statement identifier for lambda policy | lambda_test_permission01 |
+| `bucket_in_name` | Name of the incoming bucket for original images | bucket |
+| `bucket_out_name` | The name of the bucket containing resized images | original |
+| `lambda_runtime` | Runtime of the deployed lambda | python3.6 |
 | `lambda_handler` | Function and method with lambda handler | Python example: image_resize.lambda_handler, Java example:package.ClassName::handlerFunction |
 | `lambda_timeout` | Function timeout in seconds | 5 |
 | `lambda_memory` | Function memory in MB | 128 |
+| `api_gateway_title` | The name of the new API gateway | MyAPIGateway |
+| `api_gateway_resource_uri` | Resource URI to connect to API Gateway | "arn:aws:apigateway:eu-central-1:lambda:path/2015-03-31/functions/arn:aws:lambda:test:826815320240:function:my-function/invocations" |
+
+There is currently a swagger file for creating API Gateway with one POST method that connects to created AWS lambda. To
+connect your own resource delete line `api_gateway_resource_uri_override: "arn:aws:apigateway:{{ aws_region }}:lambda:path/2015-03-31/functions/{{ lambda_function_arn }}/invocations"`
+in `modules/api_gateway/playbooks/create.yaml` which overrides `api_gateway_resource_uri` variable.
 
 You can invoke the deployment using the command below. 
 
 ```console
-(venv) $ cd cloud/aws/thumbnail-generator
-(venv) cloud/aws/thumbnail-generator$ opera deploy -i inputs.yaml service.yaml
+(venv) $ cd cloud/aws/thumbnail-generator-with-api-gateway
+(venv) cloud/aws/thumbnail-generator-with-api-gateway$ opera deploy -i inputs.yaml service.yaml
 [Worker_0]   Deploying my-workstation_0
 [Worker_0]   Deployment of my-workstation_0 complete
 [Worker_0]   Deploying prerequisites_0
@@ -86,21 +93,21 @@ You can invoke the deployment using the command below.
 [Worker_0]   Deploying bucket_out_0
 [Worker_0]     Executing create on bucket_out_0
 [Worker_0]   Deployment of bucket_out_0 complete
-[Worker_0]   Deploying bucket_notification_0
-[Worker_0]     Executing create on bucket_notification_0
-[Worker_0]   Deployment of bucket_notification_0 complete
+[Worker_0]   Deploying api_gateway_0
+[Worker_0]     Executing create on api_gateway_0
+[Worker_0]   Deployment of api_gateway_0 complete
 ```
 
 You can undeploy the solution with:
 
 ```console
-(venv) cloud/aws/thumbnail-generator$ opera undeploy
+(venv) cloud/aws/thumbnail-generator-with-api-gateway$ opera undeploy
 [Worker_0]   Undeploying bucket_out_0
 [Worker_0]     Executing delete on bucket_out_0
 [Worker_0]   Undeployment of bucket_out_0 complete
-[Worker_0]   Undeploying bucket_notification_0
-[Worker_0]     Executing delete on bucket_notification_0
-[Worker_0]   Undeployment of bucket_notification_0 complete
+[Worker_0]   Undeploying api_gateway_0
+[Worker_0]     Executing delete on api_gateway_0
+[Worker_0]   Undeployment of api_gateway_0 complete
 [Worker_0]   Undeploying lambda_0
 [Worker_0]     Executing delete on lambda_0
 [Worker_0]   Undeployment of lambda_0 complete
@@ -116,3 +123,25 @@ You can undeploy the solution with:
 [Worker_0]   Undeploying my-workstation_0
 [Worker_0]   Undeployment of my-workstation_0 complete
 ```
+
+You can test the deployment of your API Gateway by uploading the image to your original bucket and then invoking the
+function in API by testing the POST method. Here you can provide the following request body:
+
+```json
+{
+  "Records": [
+    {
+      "s3": {
+        "bucket": {
+          "name": "bucket-name"
+        },
+        "object": {
+          "key": "image.jpg"
+        }
+      }
+    }
+  ]
+}
+```
+
+You can also try to invoke the API using Postman or curl.
