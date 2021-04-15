@@ -3,7 +3,7 @@ Run Kubernetes with a [Rancher](https://rancher.com/) Docker container.
 
 ## Table of Contents
   - [Description](#description)
-  - [Description](#prerequisites)
+  - [Prerequisites](#prerequisites)
   - [Running with xOpera](#running-with-xopera)
 
 ## Prerequisites

@@ -5,6 +5,11 @@ imports:
   - modules/bucket/bucket.yaml
   - modules/function/function.yaml
 
+metadata:
+  template_name: "thumbnail-generator"
+  template_author: "XLAB"
+  template_version: "1.0"
+
 topology_template:
   inputs:
     host_ip:

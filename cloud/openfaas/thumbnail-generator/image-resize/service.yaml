@@ -7,6 +7,11 @@ imports:
   - modules/function-deploy/function-deploy.yaml
   - modules/bucket-notification/bucket-notification.yaml
 
+metadata:
+  template_name: "thumbnail-generator"
+  template_author: "XLAB"
+  template_version: "1.0"
+
 topology_template:
   inputs:
     host_ip:

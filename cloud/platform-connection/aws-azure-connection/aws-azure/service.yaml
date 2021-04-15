@@ -6,6 +6,11 @@ imports:
   - modules/transfer/transfer.yaml
   - modules/azure/azure.yaml
 
+metadata:
+  template_name: "aws-azure-connection"
+  template_author: "XLAB"
+  template_version: "1.0"
+
 topology_template:
   inputs:
     host_ip:
