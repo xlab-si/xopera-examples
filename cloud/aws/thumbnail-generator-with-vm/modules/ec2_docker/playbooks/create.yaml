@@ -1,0 +1,44 @@
+---
+- hosts: all
+  gather_facts: no
+  vars:
+    ansible_ssh_private_key_file: "{{ ssh_key_file }}"
+    ansible_ssh_user: "{{ ssh_user }}"
+  tasks:
+    - name: Establish nopasswd sudo for ansible user
+      shell: "sudo usermod -aG wheel {{ ssh_user }}"
+
+    - name: Install prerequsiste packages
+      package:
+        name:
+          - python3
+      become: true
+      become_method: sudo
+
+    - name: Install prerequsiste Python packages
+      pip:
+        name:
+          - pip==21.0.1
+          - docker==4.4.1
+        state: latest
+        executable: pip3
+      become: true
+      become_method: sudo
+
+    - name: Upgrade all yum packages
+      yum:
+        name: '*'
+        state: latest
+        lock_timeout: 15
+      become: true
+      become_method: sudo
+
+    - name: Install the most recent Docker Engine package and launch Docker service
+      shell: |
+        amazon-linux-extras install docker -y
+        service docker start
+        usermod -a -G docker ec2-user
+        chkconfig docker on
+      become: true
+      become_method: sudo
+...

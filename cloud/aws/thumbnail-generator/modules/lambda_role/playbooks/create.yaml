@@ -1,0 +1,31 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: "Create a new Lambda AWS role: {{ role_name }}"
+      iam_role:
+        name: "{{ role_name }}"
+        region: "{{ region }}"
+        description: "Lambda role"
+        assume_role_policy_document: |
+          {
+              "Version": "2012-10-17",
+              "Statement": {
+                  "Effect": "Allow",
+                  "Principal": {
+                      "Service": "lambda.amazonaws.com"
+                  },
+                  "Action": "sts:AssumeRole"
+              }
+          }
+        managed_policy:
+          - arn:aws:iam::aws:policy/AWSLambda_FullAccess
+          - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+          - arn:aws:iam::aws:policy/AmazonS3FullAccess
+      register: iam_role_response
+
+    - name: Set attributes
+      set_stats:
+        data:
+          role_arn: "{{ iam_role_response.arn }}"
+...

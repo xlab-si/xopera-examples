@@ -1,0 +1,40 @@
+---
+- hosts: all
+  gather_facts: no
+  vars:
+    ansible_ssh_private_key_file: "{{ ssh_key_file }}"
+    ansible_ssh_user: "{{ ssh_user }}"
+    ansible_python_interpreter: /usr/bin/python3
+  tasks:
+    - name: Copy web app files to EC2 VM
+      copy:
+        src: web_app
+        dest: "/home/{{ ssh_user }}"
+        owner: "{{ ssh_user }}"
+        group: "{{ ssh_user }}"
+        mode: '0644'
+      become: true
+      become_method: sudo
+
+    - name: Build Docker container image from web app
+      docker_image:
+        name: web-app:0.1.0
+        build:
+          path: "/home/{{ ssh_user }}/web_app"
+        source: build
+      become: true
+      become_method: sudo
+
+    - name: Run the web app in a Docker container
+      docker_container:
+        name: web-app
+        image: web-app:0.1.0
+        published_ports:
+          - 80:80
+        state: started
+        env:
+          REGION_NAME: "{{ region }}"
+          BUCKET_NAME: "{{ bucket_name }}"
+      become: true
+      become_method: sudo
+...

@@ -1,0 +1,15 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Remove EC2 key pair by name
+      amazon.aws.ec2_key:
+        name: "{{ ssh_key_name }}"
+        region: "{{ region }}"
+        state: absent
+
+    - name: Delete local ssh key file
+      file:
+        state: absent
+        path: "{{ ssh_key_file_path }}"
+...

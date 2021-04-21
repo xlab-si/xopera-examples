@@ -1,0 +1,21 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Create a new EC2 key pair and return a generated private key
+      amazon.aws.ec2_key:
+        name: "{{ ssh_key_name }}"
+        region: "{{ region }}"
+      register: ec2_key_result
+
+    - name: Write private key to file
+      copy:
+        content: "{{ ec2_key_result.key.private_key }}"
+        dest: "{{ ssh_key_file_path }}"
+        mode: '0400'
+
+    - name: Set attributes
+      set_stats:
+        data:
+          ssh_key_file: "{{ ssh_key_file_path }}"
+...

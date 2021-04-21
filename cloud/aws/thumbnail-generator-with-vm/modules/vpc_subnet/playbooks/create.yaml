@@ -1,0 +1,26 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Create a new VPC
+      amazon.aws.ec2_vpc_net:
+        name: Thumbnail-VPC
+        cidr_block: 10.0.0.0/24
+        region: "{{ region }}"
+      register: vpc
+
+    - name: Create a new VPC subnet
+      amazon.aws.ec2_vpc_subnet:
+        vpc_id: "{{ vpc.vpc.id }}"
+        region: "{{ region }}"
+        cidr: 10.0.0.0/24
+        tags:
+          Name: Thumbnail generator subnet
+      register: vpc_subnet
+
+    - name: Set attributes
+      set_stats:
+        data:
+          vpc_id: "{{ vpc.vpc.id }}"
+          vpc_subnet_id: "{{ vpc_subnet.subnet.id }}"
+...

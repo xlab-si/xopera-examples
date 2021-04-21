@@ -6,6 +6,11 @@ imports:
   - modules/minio/minio.yaml
   - modules/openfaas/openfaas.yaml
 
+metadata:
+  template_name: "openfaas-setup"
+  template_author: "XLAB"
+  template_version: "1.0"
+
 topology_template:
   inputs:
     host_ip:

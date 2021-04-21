@@ -1,0 +1,14 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Install prerequsiste packages
+      pip:
+        name:
+          - pip
+          - botocore
+          - boto3
+          - boto
+          - awscli
+        state: latest
+...

@@ -1,0 +1,116 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+imports:
+  - modules/prerequisites/prerequisites.yaml
+  - modules/lambda_role/lambda_role.yaml
+  - modules/lambda/lambda.yaml
+  - modules/bucket/bucket.yaml
+  - modules/api_gateway/api_gateway.yaml
+
+metadata:
+  template_name: "thumbnail-generator-with-api-gateway"
+  template_author: "XLAB"
+  template_version: "1.0"
+
+topology_template:
+  inputs:
+    host_ip:
+      type: string
+    region:
+      type: string
+    lambda_role_name:
+      type: string
+    function_name:
+      type: string
+    function_alias:
+      type: string
+    permission_id:
+      type: string
+    bucket_in_name:
+      type: string
+    bucket_out_name:
+      type: string
+    lambda_runtime:
+      type: string
+    lambda_handler:
+      type: string
+    lambda_timeout:
+      type: string
+    lambda_memory:
+      type: string
+    api_gateway_title:
+      type: string
+    api_gateway_resource_uri:
+      type: string
+
+  node_templates:
+    my-workstation:
+      type: tosca.nodes.Compute
+      attributes:
+        private_address: { get_input: host_ip }
+        public_address: { get_input: host_ip }
+
+    prerequisites:
+      type: radon.nodes.aws.prerequisites
+      requirements:
+        - host: my-workstation
+
+    lambda_role:
+      type: radon.nodes.aws.lambda_role
+      properties:
+        region: { get_input: region }
+        role_name: { get_input: lambda_role_name }
+      requirements:
+        - host: my-workstation
+        - requires_prerequisites: prerequisites
+
+    lambda:
+      type: radon.nodes.aws.lambda
+      properties:
+        region: { get_input: region }
+        function_name: { get_input: function_name }
+        function_alias: { get_input: function_alias }
+        permission_id: { get_input: permission_id }
+        lambda_runtime: { get_input: lambda_runtime }
+        lambda_handler: { get_input: lambda_handler }
+        lambda_timeout: { get_input: lambda_timeout }
+        lambda_memory: { get_input: lambda_memory }
+        bucket_out_name: { get_input: bucket_out_name }
+      requirements:
+        - host: my-workstation
+        - requires_prerequisites: prerequisites
+        - requires_role: lambda_role
+
+    bucket_in:
+      type: radon.nodes.aws.bucket
+      properties:
+        bucket_name: { get_input: bucket_in_name }
+        region: { get_input: region }
+      requirements:
+        - host: my-workstation
+        - requires_prerequisites: prerequisites
+
+    bucket_out:
+      type: radon.nodes.aws.bucket
+      properties:
+        bucket_name: { get_input: bucket_out_name }
+        region: { get_input: region }
+      requirements:
+        - host: my-workstation
+        - requires_prerequisites: prerequisites
+
+    api_gateway:
+      type: radon.nodes.aws.api_gateway
+      properties:
+        api_gateway_title: { get_input: api_gateway_title }
+        aws_region: { get_input: region }
+        role_name: { get_input: lambda_role_name }
+        function_name: { get_input: function_name }
+        api_gateway_resource_uri: { get_input: api_gateway_resource_uri }
+      requirements:
+        - host: my-workstation
+        - requires_prerequisites: prerequisites
+        - requires_role: lambda_role
+        - receives_notification: lambda
+...

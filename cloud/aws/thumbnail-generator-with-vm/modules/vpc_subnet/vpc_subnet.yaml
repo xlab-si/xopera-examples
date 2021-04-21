@@ -1,0 +1,42 @@
+---
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+node_types:
+  radon.nodes.aws.vpc_subnet:
+    derived_from: tosca.nodes.Compute
+    attributes:
+      vpc_id:
+        type: string
+      vpc_subnet_id:
+        type: string
+    properties:
+      region:
+        type: string
+    interfaces:
+      Standard:
+        type: tosca.interfaces.node.lifecycle.Standard
+        operations:
+          create:
+            inputs:
+              region:
+                type: string
+                default: { get_property: [ SELF, region ] }
+            implementation: playbooks/create.yaml
+          delete:
+            inputs:
+              region:
+                type: string
+                default: { get_property: [ SELF, region ] }
+              vpc_subnet_id:
+                type: string
+                default: { get_attribute: [ SELF, vpc_subnet_id ] }
+            implementation: playbooks/create.yaml
+    capabilities:
+      requires_vpc_subnet:
+        type: tosca.capabilities.Compute
+        valid_source_types: [ radon.nodes.aws.ec2_vm ]
+    requirements:
+      - requires_prerequisites:
+          capability: tosca.capabilities.Node
+          relationship: tosca.relationships.DependsOn
+...

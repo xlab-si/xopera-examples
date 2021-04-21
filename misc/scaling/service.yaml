@@ -1,5 +1,10 @@
 tosca_definitions_version: tosca_simple_yaml_1_3
 
+metadata:
+  template_name: "scaling"
+  template_author: "XLAB"
+  template_version: "1.0"
+
 node_types:
   radon.nodes.aws.AwsLambda:
     derived_from: tosca.nodes.SoftwareComponent

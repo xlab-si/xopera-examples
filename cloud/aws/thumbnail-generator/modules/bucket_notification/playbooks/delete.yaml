@@ -1,0 +1,11 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Delete bucket notification
+      s3_bucket_notification:
+        state: absent
+        region: "{{ region }}"
+        event_name: "{{ event_name }}"
+        bucket_name: "{{ bucket_name }}"
+...

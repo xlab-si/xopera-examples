@@ -2,30 +2,28 @@
 # This yaml file contains inputs for service.yaml.
 
 host_ip: <host-ip>
-aws_region: <aws-region>
-role_name: <role-name>
-role_description: <role-description>
-function_name: <lambda-name>
-function_alias: <alias>
+region: <aws-region>
+lambda_role_name: <aws-lambda-role-name>
+function_name: <aws-lambda-name>
+function_alias: <aws-function-alias>
 permission_id: <permission-id>
-bucket_in_name: <bucket-in-name>
-bucket_out_name: <bucket-out-name>
-lambda_runtime: <runtime>
-lambda_handler: <handler>
-lambda_timeout: <timeout-seconds>
-lambda_memory: <memory-mb>
+bucket_in_name: <aws-bucket-in-name>
+bucket_out_name: <aws-bucket-out-name>
+lambda_runtime: <aws-lambda-runtime>
+lambda_handler: <aws-lambda-handler>
+lambda_timeout: <aws-lambda-timeout-seconds>
+lambda_memory: <aws-lambda-memory-mb>
 
 ### Example:
 # host_ip: localhost
-# aws_region: eu-central-1
-# role_name: RadonLambdaRole
-# role_description: Lambda role
+# region: eu-central-1
+# lambda_role_name: LambdaRole
 # function_name: image-resize-lambda
 # function_alias: test
 # permission_id: lambda_test_permission
 # bucket_in_name: original
 # bucket_out_name: resized
-# lambda_runtime: python3.6
+# lambda_runtime: python3.8
 # lambda_handler: image_resize.lambda_handler
 # lambda_timeout: 5
 # lambda_memory: 128

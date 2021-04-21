@@ -5,6 +5,11 @@ imports:
   - lib/docker/docker.yaml
   - lib/minio/minio.yaml
 
+metadata:
+  template_name: "docker"
+  template_author: "XLAB"
+  template_version: "1.0"
+
 topology_template:
   inputs:
     host_ip:

@@ -1,0 +1,10 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: "Delete EC2 AWS role : {{ role_name }}"
+      iam_role:
+        state: absent
+        name: "{{ role_name }}"
+        region: "{{ region }}"
+...

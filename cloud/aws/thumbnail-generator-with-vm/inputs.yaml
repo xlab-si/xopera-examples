@@ -1,0 +1,43 @@
+---
+# This yaml file contains inputs for service.yaml.
+
+host_ip: <host-ip>
+region: <aws-region>
+lambda_role_name: <aws-lambda-role-name>
+function_name: <aws-lambda-name>
+function_alias: <aws-function-alias>
+permission_id: <permission-id>
+bucket_in_name: <aws-bucket-in-name>
+bucket_out_name: <aws-bucket-out-name>
+lambda_runtime: <aws-lambda-runtime>
+lambda_handler: <aws-lambda-handler>
+lambda_timeout: <aws-lambda-timeout-seconds>
+lambda_memory: <aws-lambda-memory-mb>
+ec2_role_name: <aws-ec2-role-name>
+ssh_key_name: <aws-ec2-ssh-key-name>
+ssh_user: <aws-ec2-ssh_user>
+security_group: <aws-ec2-security-group>
+instance_type: <aws-ec2-instance-type>
+image: <aws-ec2-image>
+
+### Example:
+# host_ip: localhost
+# region: eu-central-1
+# lambda_role_name: DemoLambdaRole
+# function_name: demo-image-resize-lambda
+# function_alias: demo
+# permission_id: lambda_demo_permission
+# bucket_in_name: demo-bucket-in
+# bucket_out_name: demo-bucket-out
+# lambda_runtime: python3.8
+# lambda_handler: image_resize.lambda_handler
+# lambda_timeout: 5
+# lambda_memory: 128
+# ec2_role_name: DemoEC2Role
+# ssh_key_name: demo-thumbnail-generator-key
+# ssh_key_file_path: /tmp/ssh_key_file
+# ssh_user: ec2-user
+# security_group: demo-thumbnail-generator
+# instance_type: t2.micro
+# image: ami-0db9040eb3ab74509
+...

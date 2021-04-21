@@ -1,0 +1,41 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Install prerequsiste packages
+      pip:
+        name:
+          - botocore
+          - boto3
+          - boto
+        state: latest
+
+    - name: "Create a new EC2 AWS role: {{ role_name }}"
+      iam_role:
+        name: "{{ role_name }}"
+        region: "{{ region }}"
+        description: "EC2 role"
+        assume_role_policy_document: |
+          {
+              "Version": "2012-10-17",
+              "Statement": {
+                  "Effect": "Allow",
+                  "Principal": {
+                      "Service": "ec2.amazonaws.com"
+                  },
+                  "Action": "sts:AssumeRole"
+              }
+          }
+        managed_policy:
+          - arn:aws:iam::aws:policy/AmazonS3FullAccess
+      register: iam_role_response
+
+    - name: Ensure that EC2 role is connected to instance profile
+      shell: "aws iam add-role-to-instance-profile --role-name {{ role_name }} --instance-profile-name {{ role_name }}"
+      ignore_errors: yes
+
+    - name: Set attributes
+      set_stats:
+        data:
+          role_arn: "{{ iam_role_response.arn }}"
+...

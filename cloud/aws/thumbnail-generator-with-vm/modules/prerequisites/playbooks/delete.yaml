@@ -1,0 +1,13 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: Renove prerequsiste packages
+      pip:
+        name:
+          - botocore
+          - boto3
+          - boto
+          - awscli
+        state: absent
+...

@@ -5,6 +5,11 @@ imports:
   - lib/rancher/rancher.yaml
   - lib/prometheus-helm-chart/prometheus-helm-chart.yaml
 
+metadata:
+  template_name: "rancher"
+  template_author: "XLAB"
+  template_version: "1.0"
+
 topology_template:
   inputs:
     host_ip:
