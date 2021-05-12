@@ -85,6 +85,5 @@ topology_template:
       requirements:
         - host: workstation
         - bucket_in: bucket_in
-        - bucket_out: bucket_out
         - bucket_function: bucket_function
 ...
