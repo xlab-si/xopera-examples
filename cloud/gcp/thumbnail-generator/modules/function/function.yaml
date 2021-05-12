@@ -76,4 +76,11 @@ node_types:
               dependencies:
                 - playbooks/function
           delete: playbooks/delete.yaml
+    requirements:
+      - bucket_in:
+          capability: tosca.capabilities.Node
+          relationship: tosca.relationships.DependsOn
+      - bucket_function:
+          capability: tosca.capabilities.Node
+          relationship: tosca.relationships.DependsOn
 ...
