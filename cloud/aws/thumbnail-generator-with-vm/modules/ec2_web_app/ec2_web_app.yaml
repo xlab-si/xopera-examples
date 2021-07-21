@@ -12,7 +12,9 @@ node_types:
         type: string
       region:
         type: string
-      bucket_name:
+      bucket_in_name:
+        type: string
+      bucket_out_name:
         type: string
     interfaces:
       Standard:
@@ -29,9 +31,12 @@ node_types:
               region:
                 type: string
                 default: { get_property: [ SELF, region ] }
-              bucket_name:
+              bucket_in_name:
                 type: string
-                default: { get_property: [ SELF, bucket_name ] }
+                default: { get_property: [ SELF, bucket_in_name ] }
+              bucket_out_name:
+                type: string
+                default: { get_property: [ SELF, bucket_out_name ] }
             implementation:
               primary: playbooks/create.yaml
               dependencies:
