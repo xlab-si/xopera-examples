@@ -183,7 +183,8 @@ topology_template:
       properties:
         ssh_user: { get_input: ssh_user }
         region: { get_input: region }
-        bucket_name: { get_input: bucket_out_name }
+        bucket_in_name: { get_input: bucket_in_name }
+        bucket_out_name: { get_input: bucket_out_name }
       requirements:
         - host: ec2_vm
         - requires_prerequisites: prerequisites

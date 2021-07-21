@@ -34,7 +34,8 @@
         state: started
         env:
           REGION_NAME: "{{ region }}"
-          BUCKET_NAME: "{{ bucket_name }}"
+          BUCKET_IN_NAME: "{{ bucket_in_name }}"
+          BUCKET_OUT_NAME: "{{ bucket_out_name }}"
       become: true
       become_method: sudo
 ...
