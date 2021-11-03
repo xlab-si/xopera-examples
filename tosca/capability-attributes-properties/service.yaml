@@ -51,7 +51,7 @@ node_types:
               req_prop_input: { default: { get_property: [ SELF, my_target, my_property] }, type: string }
     requirements:
       - my_target:
-          capability: tosca.capabilities.Root
+          capability: tosca.capabilities.Node
           relationship: tosca.relationships.DependsOn
 
 topology_template:
