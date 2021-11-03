@@ -83,6 +83,8 @@ topology_template:
 
     compute:
       type: tosca.nodes.Compute
+      attributes:
+        public_address: localhost
 
   policies:
     - scale_down:

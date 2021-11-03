@@ -54,6 +54,8 @@ topology_template:
 
     compute:
       type: tosca.nodes.Compute
+      attributes:
+        public_address: localhost
 
   outputs:
     output_attribute_text_file:
