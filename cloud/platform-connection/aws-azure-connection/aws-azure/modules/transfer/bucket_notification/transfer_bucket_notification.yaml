@@ -32,6 +32,6 @@ node_types:
               primary: playbooks/create.yaml
     requirements:
       - receives_notification:
-          capability: tosca.capabilities.Compute
+          capability: tosca.capabilities.Node
           relationship: tosca.relationships.DependsOn
 ...

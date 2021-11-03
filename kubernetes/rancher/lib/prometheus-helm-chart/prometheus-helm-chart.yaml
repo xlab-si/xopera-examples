@@ -15,6 +15,6 @@ node_types:
           capability: tosca.capabilities.Compute
           relationship: tosca.relationships.HostedOn
       - rancher:
-          capability: tosca.capabilities.Compute
+          capability: tosca.capabilities.Node
           relationship: tosca.relationships.DependsOn
 ...
