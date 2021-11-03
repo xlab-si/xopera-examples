@@ -89,6 +89,6 @@ node_types:
         valid_source_types: [radon.nodes.aws_transfer_notification]
     requirements:
       - connection_str:
-          capability: tosca.capabilities.Compute
+          capability: tosca.capabilities.Node
           relationship: tosca.relationships.DependsOn
 ...

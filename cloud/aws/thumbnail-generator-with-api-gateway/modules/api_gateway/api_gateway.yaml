@@ -56,6 +56,6 @@ node_types:
           capability: tosca.capabilities.Node
           relationship: tosca.relationships.DependsOn
       - receives_notification:
-          capability: tosca.capabilities.Compute
+          capability: tosca.capabilities.Node
           relationship: tosca.relationships.DependsOn
 ...
