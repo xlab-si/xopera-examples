@@ -49,6 +49,11 @@ topology_template:
         json_file:
           type: tosca.artifacts.File
           file: files/file.json
+      requirements:
+        - host: compute
+
+    compute:
+      type: tosca.nodes.Compute
 
   outputs:
     output_attribute_text_file:

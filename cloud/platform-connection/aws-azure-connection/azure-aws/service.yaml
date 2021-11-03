@@ -103,6 +103,7 @@ topology_template:
       requirements:
         - host: my-workstation
         - requires_role: aws_lambda_role
+        - bucket: bucket_in
 
     bucket_in:
       type: radon.nodes.s3_bucket
