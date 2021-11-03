@@ -73,9 +73,16 @@ topology_template:
   node_templates:
     aws_lambda:
       type: radon.nodes.aws.AwsLambda
+      requirements:
+        - host: compute
 
     configure_monitoring:
       type: radon.nodes.monitoring.configure
+      requirements:
+        - host: compute
+
+    compute:
+      type: tosca.nodes.Compute
 
   policies:
     - scale_down:

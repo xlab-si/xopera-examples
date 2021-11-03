@@ -81,6 +81,7 @@ topology_template:
         - host: my-workstation
         - requires_prerequisites: prerequisites
         - requires_role: lambda_role
+        - bucket: bucket_in
 
     bucket_in:
       type: radon.nodes.aws.bucket
