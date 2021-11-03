@@ -16,6 +16,7 @@ This repository contains working examples of blueprints (TOSCA templates and the
 [OASIS TOSCA](https://www.oasis-open.org/committees/tc_home.php?wg_abbrev=tosca) service templates get started with 
 [OASIS YAML Simple Profile v1.3](https://docs.oasis-open.org/tosca/TOSCA-Simple-Profile-YAML/v1.3/cos01/TOSCA-Simple-Profile-YAML-v1.3-cos01.html) 
 and the use of [Ansible automation](https://www.ansible.com/) for implementing TOSCA interfaces.
+The examples here are also explained more in detail within the [xOpera documentation](https://xlab-si.github.io/xopera-docs/examples.html) page.
 
 ## Prerequisites
 The main requirement for the examples to work is that we have the ``opera`` installed as detailed in the tool's 
