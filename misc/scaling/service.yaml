@@ -5,15 +5,25 @@ metadata:
   template_author: "XLAB"
   template_version: "1.0"
 
+interface_types:
+  radon.interfaces.Scaling:
+    derived_from: tosca.interfaces.Root
+    operations:
+      scale_down:
+        description: scale down
+      scale_up:
+        description: scale up
+
 node_types:
   radon.nodes.aws.AwsLambda:
     derived_from: tosca.nodes.SoftwareComponent
     interfaces:
-      tosca.interfaces.node.lifecycle.Standard:
+      Standard:
         operations:
           create: playbooks/create.yaml
           delete: playbooks/delete.yaml
-      radon.interfaces.scaling:
+      Scaling:
+        type: radon.interfaces.Scaling
         operations:
           scale_down: playbooks/scale_down.yaml
           scale_up: playbooks/scale_up.yaml
@@ -50,7 +60,7 @@ policy_types:
         target_filter:
           node: radon.nodes.aws.AwsLambda
         action:
-          - call_operation: radon.interfaces.scaling.scale_down
+          - call_operation: Scaling.scale_down
 
   radon.policies.scaling.ScaleUp:
     derived_from: tosca.policies.Scaling
@@ -67,7 +77,7 @@ policy_types:
         target_filter:
           node: radon.nodes.aws.AwsLambda
         action:
-          - call_operation: radon.interfaces.scaling.scale_up
+          - call_operation: Scaling.scale_up
 
 topology_template:
   node_templates:
