@@ -97,7 +97,7 @@ policy_types:
           node: radon.nodes.OpenStack.VM
         condition:
           constraint:
-            not:
+            - not:
                 - and:
                     - available_instances: [ { greater_than: 42 } ]
                     - available_space: [ { greater_than: 1000 } ]
@@ -131,7 +131,7 @@ policy_types:
           node: radon.nodes.OpenStack.VM
         condition:
           constraint:
-            not:
+            - not:
                 - and:
                     - available_instances: [ { greater_than: 42 } ]
                     - available_space: [ { greater_than: 1000 } ]
@@ -208,7 +208,7 @@ topology_template:
               node: openstack_vm
             condition:
               constraint:
-                not:
+                - not:
                     - and:
                         - available_instances: [ { greater_than: 42 } ]
                         - available_space: [ { greater_than: 1000 } ]
