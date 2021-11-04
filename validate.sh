@@ -22,10 +22,10 @@ validate_example() {
   cd "$example_base_path" || true
 
   if [ "$inputs_file_name" == "" ]; then
-    validate=$($opera_executable validate "${service_template_file_name}" > /dev/null 2>&1)
+    validate=$($opera_executable validate "${service_template_file_name}" 2>&1)
     exit_code="$?"
   else
-    validate=$($opera_executable validate -i "${inputs_file_name}" "${service_template_file_name}" > /dev/null 2>&1)
+    validate=$($opera_executable validate -i "${inputs_file_name}" "${service_template_file_name}" 2>&1)
     exit_code="$?"
   fi
 
@@ -39,6 +39,7 @@ validate_example() {
   else
     failed=$((failed+1))
     printf "%-80s ERROR\n" "$example_base_path"
+    echo "$validate"
   fi
 
   return 0
