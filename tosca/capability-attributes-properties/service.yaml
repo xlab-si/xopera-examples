@@ -5,6 +5,16 @@ metadata:
   template_author: "XLAB"
   template_version: "1.0"
 
+capability_types:
+  MyCapabilityType:
+    derived_from: tosca.capabilities.Root
+    attributes:
+      capability_attribute:
+        type: string
+    properties:
+      capability_property:
+        type: string
+
 node_types:
   my_first_node_type:
     derived_from: tosca.nodes.Root
@@ -32,13 +42,7 @@ node_types:
         description: Requirement property
     capabilities:
       my_capability:
-        type: tosca.capabilities.Root
-        attributes:
-          capability_attribute:
-            type: string
-        properties:
-          capability_property:
-            type: string
+        type: MyCapabilityType
     interfaces:
       Standard:
         operations:
