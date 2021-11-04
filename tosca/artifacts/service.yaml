@@ -54,8 +54,11 @@ topology_template:
 
     compute:
       type: tosca.nodes.Compute
+<<<<<<< HEAD
       attributes:
         public_address: localhost
+=======
+>>>>>>> Fulfilled some mandatory requirements, see https://github.com/xlab-si/xopera-examples/issues/31
 
   outputs:
     output_attribute_text_file:
