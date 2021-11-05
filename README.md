@@ -26,9 +26,9 @@ and running. Some examples may require special  resources, like infrastructure (
 (AWS, Azure, GCP).
 
 ## License
-![Creative Commons License](https://i.creativecommons.org/l/by/3.0/88x31.png)
+![Creative Commons License](https://licensebuttons.net/l/by/4.0/88x31.png)
 
-This work is licensed under a [Creative Commons Attribution 3.0 Unported License](http://creativecommons.org/licenses/by/3.0/deed.en_US)
+This work is licensed under a [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/)
 
 ## Acknowledgement
 Some work from this project has received funding from the European Union’s Horizon 2020
