@@ -30,10 +30,10 @@ node_types:
       Standard:
         type: tosca.interfaces.node.lifecycle.Standard
         inputs:
-          bucket_in_name: {default: { get_property: [SELF, bucket_in_name] }, type: string }
-          bucket_out_name: {default: { get_property: [SELF, bucket_out_name] }, type: string }
-          minio_ip: {default: { get_property: [SELF, minio_ip] }, type: string }
-          credentials: {default: { get_property: [SELF, credentials] }, type: string }
+          bucket_in_name: {value: { get_property: [SELF, bucket_in_name] }, type: string }
+          bucket_out_name: {value: { get_property: [SELF, bucket_out_name] }, type: string }
+          minio_ip: {value: { get_property: [SELF, minio_ip] }, type: string }
+          credentials: {value: { get_property: [SELF, credentials] }, type: string }
         operations:
           create:
             implementation: playbooks/create.yaml

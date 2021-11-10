@@ -23,16 +23,16 @@ node_types:
             inputs:
               region:
                 type: string
-                default: { get_property: [ SELF, region ] }
+                value: { get_property: [ SELF, region ] }
             implementation: playbooks/create.yaml
           delete:
             inputs:
               region:
                 type: string
-                default: { get_property: [ SELF, region ] }
+                value: { get_property: [ SELF, region ] }
               vpc_subnet_id:
                 type: string
-                default: { get_attribute: [ SELF, vpc_subnet_id ] }
+                value: { get_attribute: [ SELF, vpc_subnet_id ] }
             implementation: playbooks/create.yaml
     capabilities:
       requires_vpc_subnet:
