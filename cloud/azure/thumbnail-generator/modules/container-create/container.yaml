@@ -35,11 +35,11 @@ node_types:
       Standard:
         type: tosca.interfaces.node.lifecycle.Standard
         inputs:
-          container_in_name: {default: { get_property: [SELF, container_in_name] }, type: string }
-          container_out_name: {default: { get_property: [SELF, container_out_name] }, type: string }
-          resource_group_name: {default: { get_property: [SELF, resource_group_name] }, type: string }
-          storage_account_name: {default: { get_property: [SELF, storage_account_name] }, type: string }
-          location: {default: { get_property: [SELF, location] }, type: string }
+          container_in_name: {value: { get_property: [SELF, container_in_name] }, type: string }
+          container_out_name: {value: { get_property: [SELF, container_out_name] }, type: string }
+          resource_group_name: {value: { get_property: [SELF, resource_group_name] }, type: string }
+          storage_account_name: {value: { get_property: [SELF, storage_account_name] }, type: string }
+          location: {value: { get_property: [SELF, location] }, type: string }
         operations:
           create: playbooks/create.yaml
 ...

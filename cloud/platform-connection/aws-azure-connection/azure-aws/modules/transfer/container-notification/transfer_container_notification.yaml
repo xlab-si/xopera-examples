@@ -50,14 +50,14 @@ node_types:
       Standard:
         type: tosca.interfaces.node.lifecycle.Standard
         inputs:
-          resource_group_name: {default: { get_property: [SELF, resource_group_name] }, type: string }
-          storage_account_name: {default: { get_property: [SELF, storage_account_name] }, type: string }
-          function_app_name: {default: { get_property: [SELF, function_app_name] }, type: string }
-          function_name: {default: { get_property: [SELF, function_name] }, type: string }
-          event_subscription_name: {default: { get_property: [SELF, event_subscription_name] }, type: string }
-          aws_credentials: {default: { get_property: [SELF, aws_credentials] }, type: string }
-          azure_container_name: {default: { get_property: [SELF, azure_container_name] }, type: string }
-          aws_bucket_name: {default: { get_property: [SELF, aws_bucket_name] }, type: string }
+          resource_group_name: {value: { get_property: [SELF, resource_group_name] }, type: string }
+          storage_account_name: {value: { get_property: [SELF, storage_account_name] }, type: string }
+          function_app_name: {value: { get_property: [SELF, function_app_name] }, type: string }
+          function_name: {value: { get_property: [SELF, function_name] }, type: string }
+          event_subscription_name: {value: { get_property: [SELF, event_subscription_name] }, type: string }
+          aws_credentials: {value: { get_property: [SELF, aws_credentials] }, type: string }
+          azure_container_name: {value: { get_property: [SELF, azure_container_name] }, type: string }
+          aws_bucket_name: {value: { get_property: [SELF, aws_bucket_name] }, type: string }
         operations:
           create:
             implementation:

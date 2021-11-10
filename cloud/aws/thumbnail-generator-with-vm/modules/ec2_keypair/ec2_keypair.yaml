@@ -21,9 +21,9 @@ node_types:
       Standard:
         type: tosca.interfaces.node.lifecycle.Standard
         inputs:
-          region: { default: { get_property: [ SELF, region ] }, type: string }
-          ssh_key_name: { default: { get_property: [ SELF, ssh_key_name ] }, type: string }
-          ssh_key_file_path: { default: { get_property: [ SELF, ssh_key_file_path ] }, type: string }
+          region: { value: { get_property: [ SELF, region ] }, type: string }
+          ssh_key_name: { value: { get_property: [ SELF, ssh_key_name ] }, type: string }
+          ssh_key_file_path: { value: { get_property: [ SELF, ssh_key_file_path ] }, type: string }
         operations:
           create:  playbooks/create.yaml
           delete:  playbooks/delete.yaml

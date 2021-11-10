@@ -12,9 +12,6 @@ node_types:
     properties:
       security_group:
         type: string
-      ssh_key_file:
-        type: string
-        default: { get_attribute: [ SELF, requires_keypair, ssh_key_file ] }
       ssh_user:
         type: string
       image:
@@ -25,12 +22,6 @@ node_types:
         type: string
       region:
         type: string
-      vpc_id:
-        type: string
-        default: { get_attribute: [ SELF, requires_vpc, vpc_id ] }
-      vpc_subnet_id:
-        type: string
-        default: { get_attribute: [ SELF, requires_vpc, vpc_subnet_id ] }
     interfaces:
       Standard:
         type: tosca.interfaces.node.lifecycle.Standard
@@ -39,49 +30,49 @@ node_types:
             inputs:
               security_group:
                 type: string
-                default: { get_property: [ SELF, security_group ] }
+                value: { get_property: [ SELF, security_group ] }
               ssh_key_file:
                 type: string
-                default: { get_property: [ SELF, ssh_key_file ] }
+                value: { get_attribute: [ SELF, requires_keypair, ssh_key_file ] }
               ssh_user:
                 type: string
-                default: { get_property: [ SELF, ssh_user ] }
+                value: { get_property: [ SELF, ssh_user ] }
               image:
                 type: string
-                default: { get_property: [ SELF, image ] }
+                value: { get_property: [ SELF, image ] }
               ssh_key_name:
                 type: string
-                default: { get_property: [ SELF, ssh_key_name ] }
+                value: { get_property: [ SELF, ssh_key_name ] }
               region:
                 type: string
-                default: { get_property: [ SELF, region ] }
+                value: { get_property: [ SELF, region ] }
               instance_type:
                 type: string
-                default: { get_property: [ SELF, instance_type ] }
+                value: { get_property: [ SELF, instance_type ] }
               vpc_id:
                 type: string
-                default: { get_property: [ SELF, vpc_id ] }
+                value: { get_attribute: [ SELF, requires_vpc, vpc_id ] }
               vpc_subnet_id:
                 type: string
-                default: { get_property: [ SELF, vpc_subnet_id ] }
+                value: { get_attribute: [ SELF, requires_vpc, vpc_subnet_id ] }
               role_instance_profile:
                 type: string
-                default: { get_property: [ SELF, requires_role, role_name ] }
+                value: { get_property: [ SELF, requires_role, role_name ] }
             implementation: playbooks/create.yaml
           delete:
             inputs:
               instance_id:
                 type: string
                 required: true
-                default: { get_attribute: [ SELF, instance_id ] }
+                value: { get_attribute: [ SELF, instance_id ] }
               group_id:
                 type: string
                 required: true
-                default: { get_attribute: [ SELF, group_id ] }
+                value: { get_attribute: [ SELF, group_id ] }
               region:
                 type: string
                 required: true
-                default: { get_property: [ SELF, region ] }
+                value: { get_property: [ SELF, region ] }
             implementation: playbooks/delete.yaml
     requirements:
       - host:

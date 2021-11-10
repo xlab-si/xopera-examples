@@ -16,16 +16,16 @@ node_types:
         type: tosca.interfaces.node.lifecycle.Standard
         inputs:
           bucket_name:
-            default: { get_property: [ SELF, bucket_name ] }
+            value: { get_property: [ SELF, bucket_name ] }
             type: string
           bucket_location:
-            default: { get_property: [ SELF, bucket_location ] }
+            value: { get_property: [ SELF, bucket_location ] }
             type: string
           project_id:
-            default: { get_input: project_id }
+            value: { get_input: project_id }
             type: string
           service_account_file:
-            default: { get_input: service_account_file }
+            value: { get_input: service_account_file }
             type: string
         operations:
           create: playbooks/create.yaml

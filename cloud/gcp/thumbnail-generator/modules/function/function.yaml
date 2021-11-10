@@ -37,37 +37,37 @@ node_types:
         type: tosca.interfaces.node.lifecycle.Standard
         inputs:
           function_name:
-            default: { get_property: [ SELF, function_name ] }
+            value: { get_property: [ SELF, function_name ] }
             type: string
           function_location:
-            default: { get_property: [ SELF, function_location ] }
+            value: { get_property: [ SELF, function_location ] }
             type: string
           bucket_in_name:
-            default: { get_property: [ SELF, bucket_in_name ] }
+            value: { get_property: [ SELF, bucket_in_name ] }
             type: string
           bucket_out_name:
-            default: { get_property: [ SELF, bucket_out_name ] }
+            value: { get_property: [ SELF, bucket_out_name ] }
             type: string
           bucket_function_name:
-            default: { get_property: [ SELF, bucket_function_name ] }
+            value: { get_property: [ SELF, bucket_function_name ] }
             type: string
           function_runtime:
-            default: { get_property: [ SELF, function_runtime ] }
+            value: { get_property: [ SELF, function_runtime ] }
             type: string
           function_entry_point:
-            default: { get_property: [ SELF, function_entry_point ] }
+            value: { get_property: [ SELF, function_entry_point ] }
             type: string
           function_timeout:
-            default: { get_property: [ SELF, function_timeout ] }
+            value: { get_property: [ SELF, function_timeout ] }
             type: string
           function_memory:
-            default: { get_property: [ SELF, function_memory ] }
+            value: { get_property: [ SELF, function_memory ] }
             type: string
           project_id:
-            default: { get_input: project_id }
+            value: { get_input: project_id }
             type: string
           service_account_file:
-            default: { get_input: service_account_file }
+            value: { get_input: service_account_file }
             type: string
         operations:
           create:

@@ -5,9 +5,6 @@ node_types:
   radon.nodes.aws.ec2_docker:
     derived_from: tosca.nodes.SoftwareComponent
     properties:
-      ssh_key_file:
-        type: string
-        default: { get_attribute: [ SELF, requires_keypair, ssh_key_file ] }
       ssh_user:
         type: string
     interfaces:
@@ -18,10 +15,10 @@ node_types:
             inputs:
               ssh_key_file:
                 type: string
-                default: { get_property: [ SELF, ssh_key_file ] }
+                value: { get_attribute: [ SELF, requires_keypair, ssh_key_file ] }
               ssh_user:
                 type: string
-                default: { get_property: [ SELF, ssh_user ] }
+                value: { get_property: [ SELF, ssh_user ] }
             implementation: playbooks/create.yaml
     requirements:
       - requires_prerequisites:

@@ -18,8 +18,8 @@ node_types:
       Standard:
         type: tosca.interfaces.node.lifecycle.Standard
         inputs:
-          bucket_name: { default: { get_property: [ SELF, bucket_name ] }, type: string }
-          region: { default: { get_property: [ SELF, region ] }, type: string }
+          bucket_name: { value: { get_property: [ SELF, bucket_name ] }, type: string }
+          region: { value: { get_property: [ SELF, region ] }, type: string }
         operations:
           create: playbooks/create.yaml
           delete: playbooks/delete.yaml
