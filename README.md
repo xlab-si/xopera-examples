@@ -8,6 +8,7 @@ Deployable TOSCA YAML v1.3 templates for [xOpera orchestration tool](https://git
   - [Introduction](#introduction)
   - [Prerequisites](#prerequisites)
   - [License](#license)
+  - [Contact](#contact)
   - [Acknowledgement](#acknowledgement)
 
 ## Introduction
@@ -30,7 +31,10 @@ and running. Some examples may require special  resources, like infrastructure (
 
 This work is licensed under a [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/)
 
+## Contact
+You can contact the xOpera team by sending an email to [xopera@xlab.si](mailto:xopera@xlab.si).
+
 ## Acknowledgement
 Some work from this project has received funding from the European Union’s Horizon 2020
 research and innovation programme under Grant Agreements No. 825040 
-([RADON](http://radon-h2020.eu/)) and No. 825480 ([SODALITE](http://www.sodalite.eu/)).
+([RADON](http://radon-h2020.eu/)), No. 825480 ([SODALITE](http://www.sodalite.eu/)) and No. 101000162 ([PIACERE](https://www.piacere-project.eu/)).
