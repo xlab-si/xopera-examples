@@ -1,0 +1,26 @@
+######################################################################
+#
+# None standardized TOSCA types.
+#
+# Copyright (c) 2021 Inria
+#
+######################################################################
+
+tosca_definitions_version: tosca_simple_yaml_1_3
+
+artifact_types:
+  tosca.artifacts.Implementation.Ansible:
+    derived_from: tosca.artifacts.Implementation
+    description: Artifact for the interpreted Ansible language
+    mime_type: application/x-ansible
+    file_ext: [ yaml ]
+
+  tosca.artifacts.File.Text:
+    derived_from: tosca.artifacts.File
+    description: Artifact for TEXT files
+    file_ext: [ txt ]
+
+  tosca.artifacts.File.Json:
+    derived_from: tosca.artifacts.File
+    description: Artifact for JSON files
+    file_ext: [ json ]

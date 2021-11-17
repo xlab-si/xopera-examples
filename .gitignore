@@ -154,3 +154,6 @@ cython_debug/
 
 # default opera storage folder
 .opera/
+
+# PlantUML diagram generation
+?

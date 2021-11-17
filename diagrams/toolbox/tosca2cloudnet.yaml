@@ -1,0 +1,71 @@
+######################################################################
+#
+# Configuration for Cloudnet TOSCA toolbox.
+#
+# Copyright (c) 2021 Inria
+#
+######################################################################
+
+# Configuration of the type checker.
+TypeSystem:
+  tosca_normative_types:
+    tosca_simple_yaml_1_3:
+      - file:/cloudnet/tosca/profiles/tosca_simple_yaml_1_3/types.yaml
+      - file:diagrams/toolbox/additional_artifact_types.yaml
+
+# Configuration of all generators.
+Generator:
+  filename-format: fullname # keep full filenames
+
+# Configuration of the Alloy generator.
+Alloy:
+  # Target directory where Alloy files are generated.
+  target-directory: diagrams/Alloy
+
+# Configuration of the declarative workflow generator.
+DeclarativeWorkflows:
+  # Target directory where declarative workflows are generated.
+  target-directory: diagrams/DeclarativeWorkflows
+
+# Configuration of the network diagram generator.
+nwdiag:
+  # Target directory where network diagrams are generated.
+  target-directory: diagrams/NetworkDiagrams
+
+# Configuration of the TOSCA diagram generator.
+tosca_diagrams:
+  # Target directory where network diagrams are generated.
+  target-directory: diagrams/ToscaDiagrams
+
+# Configuration of the UML2 diagram generator.
+UML2:
+  # Target directory where UML2 diagrams are generated.
+  target-directory: diagrams
+
+# Logging configuration.
+logging:
+  loggers:
+    cloudnet.tosca.configuration:
+      level: WARNING
+    cloudnet.tosca.importers:
+      level: WARNING
+    cloudnet.tosca.processors:
+      level: WARNING
+    cloudnet.tosca.syntax:
+      level: WARNING
+    cloudnet.tosca.type_system:
+      level: WARNING
+    cloudnet.tosca.declarative_workflows:
+      level: WARNING
+    cloudnet.tosca.alloy:
+      level: WARNING
+    cloudnet.tosca.network_diagrams:
+      level: WARNING
+    cloudnet.tosca.tosca_diagrams:
+      level: WARNING
+    cloudnet.tosca.uml2_diagrams:
+      level: WARNING
+    cloudnet.tosca.hot:
+      level: WARNING
+  root:
+    level: WARNING
