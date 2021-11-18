@@ -34,7 +34,7 @@ node_types:
             value: { get_input: marker }
             type: string
           time:
-            value: { get_property: [SELF, time] }
+            value: { get_property: [ SELF, time ] }
             type: string
         operations:
           create: playbooks/create.yaml

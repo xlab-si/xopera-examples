@@ -45,13 +45,13 @@ node_types:
       Standard:
         type: tosca.interfaces.node.lifecycle.Standard
         inputs:
-          function_app_name: {value: { get_property: [SELF, function_app_name] }, type: string }
-          node_ip: {value: { get_property: [SELF, node_ip] }, type: string }
-          storage_account_name: {value: { get_property: [SELF, storage_account_name] }, type: string }
-          resource_group_name: {value: { get_property: [SELF, resource_group_name] }, type: string }
-          function_name: {value: { get_property: [SELF, function_name] }, type: string }
-          container_out_name: {value: { get_property: [SELF, container_out_name] }, type: string }
-          location: {value: { get_property: [SELF, location] }, type: string }
+          function_app_name: { value: { get_property: [ SELF, function_app_name ] }, type: string }
+          node_ip: { value: { get_property: [ SELF, node_ip ] }, type: string }
+          storage_account_name: { value: { get_property: [ SELF, storage_account_name ] }, type: string }
+          resource_group_name: { value: { get_property: [ SELF, resource_group_name ] }, type: string }
+          function_name: { value: { get_property: [ SELF, function_name ] }, type: string }
+          container_out_name: { value: { get_property: [ SELF, container_out_name ] }, type: string }
+          location: { value: { get_property: [ SELF, location ] }, type: string }
         operations:
           create:
             implementation:

@@ -20,8 +20,8 @@ node_types:
       Standard:
         type: tosca.interfaces.node.lifecycle.Standard
         inputs:
-          linux_distro: { value: { get_property: [SELF, linux_distro] }, type: string }
-          linux_release: { value: { get_property: [SELF, linux_release] }, type: string }
+          linux_distro: { value: { get_property: [ SELF, linux_distro ] }, type: string }
+          linux_release: { value: { get_property: [ SELF, linux_release ] }, type: string }
         operations:
           create: playbooks/create.yaml
           delete: playbooks/delete.yaml

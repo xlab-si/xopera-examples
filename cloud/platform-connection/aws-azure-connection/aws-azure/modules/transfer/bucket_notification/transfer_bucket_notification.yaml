@@ -20,12 +20,12 @@ node_types:
       Standard:
         type: tosca.interfaces.node.lifecycle.Standard
         inputs:
-          aws_region: {value: { get_property: [SELF, aws_region] }, type: string }
-          suffix: {value: ".jpg", type: string }
-          events: {value: "s3:ObjectCreated:*", type: string }
-          lambda_function_arn: {value: { get_attribute: [SELF, receives_notification, function_arn] }, type: string }
-          bucket_source_name: {value: { get_property: [SELF, bucket_source_name] }, type: string }
-          event_name: {value: radon_on_jpg_transfer, type: string }
+          aws_region: { value: { get_property: [ SELF, aws_region ] }, type: string }
+          suffix: { value: ".jpg", type: string }
+          events: { value: "s3:ObjectCreated:*", type: string }
+          lambda_function_arn: { value: { get_attribute: [ SELF, receives_notification, function_arn ] }, type: string }
+          bucket_source_name: { value: { get_property: [ SELF, bucket_source_name ] }, type: string }
+          event_name: { value: radon_on_jpg_transfer, type: string }
         operations:
           create:
             implementation:

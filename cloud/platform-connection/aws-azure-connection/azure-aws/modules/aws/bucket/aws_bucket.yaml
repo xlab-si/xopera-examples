@@ -18,8 +18,8 @@ node_types:
       Standard:
         type: tosca.interfaces.node.lifecycle.Standard
         inputs:
-          bucket_name: {value: { get_property: [SELF, bucket_name] }, type: string }
-          aws_region: {value: { get_property: [SELF, aws_region] }, type: string }
+          bucket_name: { value: { get_property: [ SELF, bucket_name ] }, type: string }
+          aws_region: { value: { get_property: [ SELF, aws_region ] }, type: string }
         operations:
           create: playbooks/create.yaml
 ...

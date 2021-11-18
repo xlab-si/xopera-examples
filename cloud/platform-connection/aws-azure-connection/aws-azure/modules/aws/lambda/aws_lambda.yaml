@@ -43,16 +43,16 @@ node_types:
       Standard:
         type: tosca.interfaces.node.lifecycle.Standard
         inputs:
-          lambda_name: {value: { get_property: [SELF, lambda_name] }, type: string }
-          aws_region: {value: { get_property: [SELF, aws_region] }, type: string }
-          aws_role: {value: { get_attribute: [SELF, requires_role, role_arn] }, type: string }
-          func_alias: {value: { get_property: [SELF, function_alias] }, type: string }
-          permission_id: {value: { get_property: [SELF, permission_id] }, type: string }
-          lambda_runtime: {value: { get_property: [SELF, lambda_runtime] }, type: string }
-          lambda_handler: {value: { get_property: [SELF, lambda_handler] }, type: string }
-          lambda_timeout: {value: { get_property: [SELF, lambda_timeout] }, type: string }
-          lambda_memory: {value: { get_property: [SELF, lambda_memory] }, type: string }
-          bucket_out_name: {value: { get_property: [SELF, bucket_out_name] }, type: string }
+          lambda_name: { value: { get_property: [ SELF, lambda_name ] }, type: string }
+          aws_region: { value: { get_property: [ SELF, aws_region ] }, type: string }
+          aws_role: { value: { get_attribute: [ SELF, requires_role, role_arn ] }, type: string }
+          func_alias: { value: { get_property: [ SELF, function_alias ] }, type: string }
+          permission_id: { value: { get_property: [ SELF, permission_id ] }, type: string }
+          lambda_runtime: { value: { get_property: [ SELF, lambda_runtime ] }, type: string }
+          lambda_handler: { value: { get_property: [ SELF, lambda_handler ] }, type: string }
+          lambda_timeout: { value: { get_property: [ SELF, lambda_timeout ] }, type: string }
+          lambda_memory: { value: { get_property: [ SELF, lambda_memory ] }, type: string }
+          bucket_out_name: { value: { get_property: [ SELF, bucket_out_name ] }, type: string }
         operations:
           create:
             implementation:

@@ -25,9 +25,9 @@ node_types:
       Standard:
         type: tosca.interfaces.node.lifecycle.Standard
         inputs:
-          resize_image_name: {value: { get_property: [SELF, resize_image_name] }, type: string }
-          resize_function_name: {value: { get_property: [SELF, resize_function_name] }, type: string }
-          node_ip: {value: { get_property: [SELF, node_ip] }, type: string }
+          resize_image_name: { value: { get_property: [ SELF, resize_image_name ] }, type: string }
+          resize_function_name: { value: { get_property: [ SELF, resize_function_name ] }, type: string }
+          node_ip: { value: { get_property: [ SELF, node_ip ] }, type: string }
         operations:
           create:
             implementation: playbooks/create.yaml

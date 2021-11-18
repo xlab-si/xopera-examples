@@ -6,6 +6,8 @@
 # get opera executable
 opera_executable="$1"
 
+[[ -z "$opera_executable" ]] && echo "You have to specify path to opera as the first argument." && exit 1
+
 # initialize variables for testing
 tests_run=0
 successful=0
@@ -22,10 +24,10 @@ validate_example() {
   cd "$example_base_path" || true
 
   if [ "$inputs_file_name" == "" ]; then
-    validate=$($opera_executable validate --tosca-only "${service_template_file_name}" 2>&1)
+    validate=$($opera_executable validate "${service_template_file_name}" 2>&1)
     exit_code="$?"
   else
-    validate=$($opera_executable validate --tosca-only -i "${inputs_file_name}" "${service_template_file_name}" 2>&1)
+    validate=$($opera_executable validate -i "${inputs_file_name}" "${service_template_file_name}" 2>&1)
     exit_code="$?"
   fi
 

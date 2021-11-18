@@ -25,9 +25,9 @@ node_types:
       Standard:
         type: tosca.interfaces.node.lifecycle.Standard
         inputs:
-          aws_region: {value: { get_property: [SELF, aws_region] }, type: string}
-          role_name: {value: { get_property: [SELF, role_name] }, type: string }
-          role_description: {value: { get_property: [SELF, role_description] }, type: string }
+          aws_region: { value: { get_property: [ SELF, aws_region ] }, type: string}
+          role_name: { value: { get_property: [ SELF, role_name ] }, type: string }
+          role_description: { value: { get_property: [ SELF, role_description ] }, type: string }
         operations:
           create:
             implementation:

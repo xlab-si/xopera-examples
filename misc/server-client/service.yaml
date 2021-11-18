@@ -25,7 +25,7 @@ node_types:
         operations:
           create:
             inputs:
-              path: { value: { get_property: [SELF, path] }, type: string }
+              path: { value: { get_property: [ SELF, path ] }, type: string }
             implementation: playbooks/mock-server/create.yaml
     capabilities:
       server:
@@ -38,7 +38,7 @@ node_types:
       Standard:
         type: tosca.interfaces.node.lifecycle.Standard
         inputs:
-          path: { value: { get_property: [SELF, path] }, type: string }
+          path: { value: { get_property: [ SELF, path ] }, type: string }
         operations:
           create:
             implementation: playbooks/mock-client/create.yaml
