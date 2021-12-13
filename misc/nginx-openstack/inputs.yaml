@@ -1,0 +1,20 @@
+# This yaml file contains inputs for service.yaml.
+
+vm_name: <openstack-vm-name>
+vm_image: <openstack-vm-image-name>
+vm_flavor: <openstack-vm-flavor-name>
+vm_network: <openstack-vm-network-name>
+vm_security_groups: <openstack-vm-security-groups>
+vm_key_name: <openstack-vm-ssh-key-name>
+ssh_user: <openstack-vm-ssh-user>
+ssh_key_file: <path-to-local-ssh-private-key-file>
+
+### Example:
+# vm_name: nginx-host
+# vm_image: ubuntu-20.04.3
+# vm_flavor: small
+# vm_network: ostack2
+# vm_security_groups: default
+# vm_key_name: user1
+# ssh_user: ubuntu
+# ssh_key_file: /home/user1/.ssh/openstack.key

@@ -18,12 +18,17 @@ node_types:
         description: OpenStack network id (network names are not accepted)
       security_groups:
         type: string
-        description: >
-          OpenStack names of the security groups to which the instance should
-          be added. Comma separated string.
+        description:
+          OpenStack names of the security groups to which the instance should be added (comma separated string)
       key_name:
         type: string
         description: OpenStack SSH key name that should be placed on the VM
+      ssh_user:
+        type: string
+        description: The username that will be used to connect to the created VM
+      ssh_key_file:
+        type: string
+        description: Path to the local SSH private key file that will be used for the ssh connection to the VM
     attributes:
       id:
         type: string
@@ -34,14 +39,14 @@ node_types:
         operations:
           create:
             inputs:
-              vm_name:  { value: { get_property: [ SELF, name     ] }, type: string }
-              image:    { value: { get_property: [ SELF, image    ] }, type: string }
-              flavor:   { value: { get_property: [ SELF, flavor   ] }, type: string }
-              network:  { value: { get_property: [ SELF, network  ] }, type: string }
+              vm_name: { value: { get_property: [ SELF, name ] }, type: string }
+              image: { value: { get_property: [ SELF, image ] }, type: string }
+              flavor: { value: { get_property: [ SELF, flavor ] }, type: string }
+              network: { value: { get_property: [ SELF, network ] }, type: string }
               key_name: { value: { get_property: [ SELF, key_name ] }, type: string }
-              security_groups:
-                value: { get_property: [ SELF, security_groups ] }
-                type: string
+              security_groups: { value: { get_property: [ SELF, security_groups ] }, type: string }
+              ssh_user: { value: { get_property: [ SELF, ssh_user ] }, type: string }
+              ssh_key_file: { value: { get_property: [ SELF, ssh_key_file ] }, type: string }
             implementation: playbooks/create.yaml
           delete:
             inputs:

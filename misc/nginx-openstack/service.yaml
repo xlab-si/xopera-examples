@@ -10,23 +10,49 @@ imports:
   - library/openstack/main.yaml
 
 topology_template:
-  node_templates:
-    nginx:
-      type: nginx.Server
-      requirements:
-        - host: vm
+  inputs:
+    vm_name:
+      type: string
+    vm_image:
+      type: string
+    vm_flavor:
+      type: string
+    vm_network:
+      type: string
+    vm_security_groups:
+      type: string
+    vm_key_name:
+      type: string
+    ssh_user:
+      type: string
+    ssh_key_file:
+      type: string
 
+  node_templates:
     vm:
       type: openstack.VM
       properties:
-        name: nginx_host
-        image: 9ea4856a-32b2-4553-b408-cfa4cb1bb40b
-        flavor: d3046a41-245a-4042-862e-59568e81f8fa
-        network: 753940e0-c2a7-4c9d-992e-4d5bd71f85aa
-        security_groups: default
-        key_name: tadej_borovsak
+        name: { get_input: vm_name }
+        image: { get_input: vm_image }
+        flavor: { get_input: vm_flavor }
+        network: { get_input: vm_network }
+        security_groups: { get_input: vm_security_groups }
+        key_name: { get_input: vm_key_name }
+        ssh_user: { get_input: ssh_user }
+        ssh_key_file: { get_input: ssh_key_file }
+
+    nginx:
+      type: nginx.Server
+      properties:
+        ssh_user: { get_input: ssh_user }
+        ssh_key_file: { get_input: ssh_key_file }
+      requirements:
+        - host: vm
 
     site:
       type: nginx.Site
+      properties:
+        ssh_user: { get_input: ssh_user }
+        ssh_key_file: { get_input: ssh_key_file }
       requirements:
         - host: nginx

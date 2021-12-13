@@ -1,9 +1,12 @@
 ---
 - hosts: all
+  gather_facts: no
   become: yes
-
+  vars:
+    ansible_ssh_private_key_file: "{{ ssh_key_file }}"
+    ansible_ssh_user: "{{ ssh_user }}"
   tasks:
-    - name: Install sample site
+    - name: Uninstall sample site
       file:
         path: /usr/share/nginx/html/index.html
         state: absent

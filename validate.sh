@@ -72,7 +72,7 @@ validate_example "misc/concurrency" "service.yaml" ""
 # test an example from misc/hello-world
 validate_example "misc/hello-world" "service.yaml" ""
 # test an example from misc/nginx-openstack
-validate_example "misc/nginx-openstack" "service.yaml" ""
+validate_example "misc/nginx-openstack" "service.yaml" "inputs.yaml"
 # test an example from misc/scaling
 validate_example "misc/scaling" "service.yaml" ""
 # test an example from misc/server-client

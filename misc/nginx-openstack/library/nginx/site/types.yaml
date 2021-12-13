@@ -6,6 +6,13 @@ imports:
 node_types:
   nginx.Site:
     derived_from: tosca.nodes.Root
+    properties:
+      ssh_user:
+        type: string
+        description: The username that will be used to connect to the created VM
+      ssh_key_file:
+        type: string
+        description: Path to the local SSH private key file that will be used for the ssh connection to the VM
     requirements:
       - host:
           capability: tosca.capabilities.Compute
@@ -13,9 +20,9 @@ node_types:
     interfaces:
       Standard:
         inputs:
-          site_config_dir:
-            value: { get_attribute: [ SELF, host, site_config_dir ] }
-            type: string
+          site_config_dir: { value: { get_attribute: [ SELF, host, site_config_dir ] }, type: string }
+          ssh_user: { value: { get_property: [ SELF, ssh_user ] }, type: string }
+          ssh_key_file: { value: { get_property: [ SELF, ssh_key_file ] }, type: string }
         operations:
           create: playbooks/create.yaml
           delete: playbooks/delete.yaml
