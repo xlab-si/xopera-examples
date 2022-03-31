@@ -1,12 +1,13 @@
 #!/bin/bash
 
 # This is the script that is used to validate that the examples are runnable with xOpera orchestrator.
-# The script is meant to be used within the CI/CD configuration, but you can also run it manually with: ./runme.sh opera
+# We validate (= parse) the xOpera examples with xOpera TOSCA parser (opera-tosca-parser PyPI package)
+# This script is used within the CI/CD, but you can also run it manually with: ./validate.sh opera-tosca-parser
 
 # get opera executable
-opera_executable="$1"
+opera_tosca_parser_executable="$1"
 
-[[ -z "$opera_executable" ]] && echo "You have to specify path to opera as the first argument." && exit 1
+[[ -z "$opera_tosca_parser_executable" ]] && echo "Missing path to opera-tosca-parser (the first argument)." && exit 1
 
 # initialize variables for testing
 tests_run=0
@@ -15,40 +16,40 @@ failed=0
 
 # function for validating and checking the exit codes of the tested examples
 validate_example() {
-  # set function arguments
-  example_base_path="$1"
-  service_template_file_name="$2"
-  inputs_file_name="$3"
+    # set function arguments
+    example_base_path="$1"
+    service_template_file_name="$2"
+    inputs_file_name="$3"
 
-  # move into folder with example
-  cd "$example_base_path" || true
+    # move into folder with example
+    cd "$example_base_path" || true
 
-  if [ "$inputs_file_name" == "" ]; then
-    validate=$($opera_executable validate "${service_template_file_name}" 2>&1)
-    exit_code="$?"
-  else
-    validate=$($opera_executable validate -i "${inputs_file_name}" "${service_template_file_name}" 2>&1)
-    exit_code="$?"
-  fi
+    if [ "$inputs_file_name" == "" ]; then
+        validate=$($opera_tosca_parser_executable parse "${service_template_file_name}" 2>&1)
+        exit_code="$?"
+    else
+        validate=$($opera_tosca_parser_executable parse -i "${inputs_file_name}" "${service_template_file_name}" 2>&1)
+        exit_code="$?"
+    fi
 
-  # move back
-  cd - > /dev/null || true
+    # move back
+    cd - >/dev/null || true
 
-  tests_run=$((tests_run+1))
-  if [ "$exit_code" -eq 0 ]; then
-    successful=$((successful+1))
-    printf "%-80s OK\n" "$example_base_path"
-  else
-    failed=$((failed+1))
-    printf "%-80s ERROR\n" "$example_base_path"
-    echo "$validate"
-  fi
+    tests_run=$((tests_run + 1))
+    if [ "$exit_code" -eq 0 ]; then
+        successful=$((successful + 1))
+        printf "%-80s OK\n" "$example_base_path"
+    else
+        failed=$((failed + 1))
+        printf "%-80s ERROR\n" "$example_base_path"
+        echo "$validate"
+    fi
 
-  return 0
+    return 0
 }
 
 # start testing
-printf "Testing opera examples ...\n"
+printf "Validating xOpera examples ...\n"
 
 # test an example from tosca/artifacts
 validate_example "tosca/artifacts" "service.yaml" ""
@@ -126,7 +127,7 @@ printf "\nTesting finished: %d tests runned, %d successful, %d failures\n" "$tes
 
 # decide the final exit code
 if [ "$failed" -ne 0 ]; then
-  exit 1
+    exit 1
 else
-  exit 0
+    exit 0
 fi
