@@ -1,0 +1,46 @@
+---
+tosca_definitions_version: tosca_2_0
+
+metadata:
+  template_name: "aws-example"
+  template_author: "XLAB"
+  template_version: "1.0"
+
+imports:
+  - profile: org.oasis-open.tosca.simple:2.0
+  - modules/prerequisites/prerequisites.yaml
+  - modules/bucket/bucket.yaml
+
+topology_template:
+  inputs:
+    host_ip:
+      type: string
+      default: "localhost"
+    region:
+      type: string
+      default: "eu-central-1"
+    bucket_name:
+      type: string
+      default: "moje-vedro"
+
+  node_templates:
+    my-workstation:
+      type: Compute
+      attributes:
+        private_address: { get_input: host_ip }
+        public_address: { get_input: host_ip }
+
+    prerequisites:
+      type: AWS.Prerequisites
+      requirements:
+        - host: my-workstation
+
+    bucket_in:
+      type: AWS.Bucket
+      properties:
+        bucket_name: { get_input: bucket_name }
+        region: { get_input: region }
+      requirements:
+        - host: my-workstation
+        - requires_prerequisites: prerequisites
+...

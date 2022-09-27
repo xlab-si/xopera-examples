@@ -1,0 +1,13 @@
+---
+tosca_definitions_version: tosca_2_0
+
+node_types:
+  AWS.Prerequisites:
+    derived_from: SoftwareComponent
+    interfaces:
+      Standard:
+        type: Lifecycle.Standard
+        operations:
+          create: playbooks/create.yaml
+          delete: playbooks/delete.yaml
+...

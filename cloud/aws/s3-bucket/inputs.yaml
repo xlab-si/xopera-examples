@@ -1,0 +1,12 @@
+---
+# This yaml file contains inputs for service.yaml.
+
+#host_ip: <host-ip>
+#region: <aws-region>
+#bucket_name: <aws-bucket-name>>
+
+### Example:
+ host_ip: localhost
+ region: eu-central-1
+ bucket_name: gxfs-original
+...
