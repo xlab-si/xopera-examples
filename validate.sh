@@ -100,6 +100,8 @@ cd ../..
 validate_example "csars/misc-tosca-types/compressed" "misc-tosca-types.csar" "inputs.yaml"
 rm -rf csars/misc-tosca-types/compressed
 
+# test an example from cloud/aws/s3-bucket
+validate_example "cloud/aws/s3-bucket" "service.yaml" "inputs.yaml"
 # test an example from cloud/aws/thumbnail-generator
 validate_example "cloud/aws/thumbnail-generator" "service.yaml" "inputs.yaml"
 # test an example from cloud/aws/thumbnail-generator-with-api-gateway
