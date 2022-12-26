@@ -1,4 +1,4 @@
-wheel==0.34.2
+wheel==0.38.1
 requests==2.23.0
 minio==5.0.4
 Pillow==9.3.0
